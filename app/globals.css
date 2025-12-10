@@ -1,26 +1,72 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+/* 
+ * Tailwind CSS v4 - CSS-First Configuration
+ * All colors are defined here using @theme directive
+ * Change any value below to update it across the entire app
+ */
+@theme {
+  /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Main Background Colors */
+  --color-background: #1a1a1a;
+  --color-background-dark: #0a0a0a;
+  --color-foreground: #ffffff;
+
+  /* Sidebar & Card Colors */
+  --color-sidebar: #252525;
+  --color-card: #252525;
+
+  /* Interactive States */
+  --color-hover: #2a2a2a;
+  --color-active: #333;
+
+  /* Border Colors */
+  --color-border: #333;
+
+  /* Text Colors - creates text-text-* and bg-text-* utilities */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #9ca3af;
+  --color-text-muted: #6b7280;
+  --color-text-tertiary: #d1d5db;
+
+  /* Accent Colors - creates accent-* utilities */
+  --color-accent-purple: #9333ea;
+  --color-accent-orange: #ea580c;
+  --color-accent-yellow: #eab308;
+  --color-accent-red: #dc2626;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom scrollbar styling - transparent background */
+textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Firefox scrollbar */
+textarea {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
