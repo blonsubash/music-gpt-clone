@@ -11,6 +11,8 @@ import {
 import { AnimatePresence } from "framer-motion";
 import { CustomAnimate } from "@/components/ui/Animate";
 import { getRandomPlaceholder } from "@/lib/placeholderUtils";
+import { useSocketContext } from "@/components/providers/SocketProvider";
+import { useGenerationStore } from "@/lib/store";
 
 interface PromptInputProps {
   placeholder?: string;
@@ -27,8 +29,12 @@ export function PromptInput({
   const [placeholder, setPlaceholder] = useState(
     externalPlaceholder ?? getRandomPlaceholder()
   );
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const { startGeneration, isConnected } = useSocketContext();
+  const { addGeneration, setCurrentGeneration } = useGenerationStore();
 
   const value = controlledValue ?? internalValue;
 
@@ -74,6 +80,55 @@ export function PromptInput({
     }
   };
 
+  const handleSubmit = async () => {
+    const promptText = value.trim();
+    if (!promptText || isSubmitting) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: promptText }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to start generation");
+      }
+
+      const data = await response.json();
+      const generation = {
+        ...data.generation,
+        createdAt: new Date(data.generation.createdAt),
+      };
+
+      addGeneration(generation);
+      setCurrentGeneration(generation);
+
+      startGeneration(generation.id, promptText);
+
+      if (!onChange) {
+        setInternalValue("");
+      }
+    } catch (error) {
+      console.error("Error submitting prompt:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
   return (
     <div className="bg-card rounded-4xl p-6 border border-border relative transition-all duration-300 ease-in-out">
       <div className="gap-4 relative">
@@ -84,7 +139,9 @@ export function PromptInput({
             placeholder=""
             value={value}
             onChange={handleChange}
-            className="flex-1 bg-transparent text-foreground placeholder-text-muted text-lg focus:outline-none w-full resize-none max-h-[140px] overflow-y-auto transition-all duration-300 ease-in-out"
+            onKeyDown={handleKeyDown}
+            disabled={isSubmitting || !isConnected}
+            className="flex-1 bg-transparent text-foreground placeholder-text-muted text-lg focus:outline-none w-full resize-none max-h-[140px] overflow-y-auto transition-all duration-300 ease-in-out disabled:opacity-50"
           />
           {!value && (
             <div className="absolute top-0 left-0 pointer-events-none text-lg text-text-muted whitespace-nowrap overflow-hidden">
@@ -139,10 +196,16 @@ export function PromptInput({
               <ChevronDown className="w-4 h-4 text-text-secondary" />
             </button>
             <button
-              className="p-3 bg-hover rounded-full hover:bg-active transition-colors"
+              className="p-3 bg-hover rounded-full hover:bg-active transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Submit"
+              onClick={handleSubmit}
+              disabled={!value.trim() || isSubmitting || !isConnected}
             >
-              <ArrowRight className="w-5 h-5 text-text-secondary" />
+              <ArrowRight
+                className={`w-5 h-5 text-text-secondary ${
+                  isSubmitting ? "animate-pulse" : ""
+                }`}
+              />
             </button>
           </div>
         </div>

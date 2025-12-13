@@ -5,6 +5,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { PromptBox } from "@/components/prompt";
 import { useActiveNavigation } from "@/hooks/useActiveNavigation";
+import { RecentGenerations } from "@/components/generation";
 
 export default function Home() {
   const { activeNav, handleNavChange } = useActiveNavigation("home");
@@ -16,6 +17,7 @@ export default function Home() {
       <main className="flex-1 ml-64 bg-background min-h-screen p-8">
         <Header />
         <PromptBox promptValue={promptValue} onPromptChange={setPromptValue} />
+        <RecentGenerations />
       </main>
     </div>
   );
