@@ -21,15 +21,27 @@ export interface Generation {
 interface GenerationStore {
   generations: Generation[];
   currentGeneration: Generation | null;
+  isPlaying: boolean;
+  currentTime: number;
+  duration: number;
+  volume: number;
   addGeneration: (generation: Generation) => void;
   updateGeneration: (id: string, updates: Partial<Generation>) => void;
   setCurrentGeneration: (generation: Generation | null) => void;
   getGenerationById: (id: string) => Generation | undefined;
+  setIsPlaying: (isPlaying: boolean) => void;
+  setCurrentTime: (time: number) => void;
+  setDuration: (duration: number) => void;
+  setVolume: (volume: number) => void;
 }
 
 export const useGenerationStore = create<GenerationStore>((set, get) => ({
   generations: [],
   currentGeneration: null,
+  isPlaying: false,
+  currentTime: 0,
+  duration: 0,
+  volume: 1,
 
   addGeneration: (generation) =>
     set((state) => ({
@@ -51,4 +63,9 @@ export const useGenerationStore = create<GenerationStore>((set, get) => ({
   setCurrentGeneration: (generation) => set({ currentGeneration: generation }),
 
   getGenerationById: (id) => get().generations.find((gen) => gen.id === id),
+
+  setIsPlaying: (isPlaying) => set({ isPlaying }),
+  setCurrentTime: (currentTime) => set({ currentTime }),
+  setDuration: (duration) => set({ duration }),
+  setVolume: (volume) => set({ volume }),
 }));

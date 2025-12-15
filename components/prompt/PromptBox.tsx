@@ -10,7 +10,7 @@ interface PromptBoxProps {
 
 export function PromptBox({ promptValue, onPromptChange }: PromptBoxProps) {
   return (
-    <div className=" grid   justify-center  mt-34 ">
+    <div className="w-full max-w-4xl mx-auto mt-34">
       <h1 className="text-3xl font-semibold mb-8 text-center">
         What Song to Create?
       </h1>

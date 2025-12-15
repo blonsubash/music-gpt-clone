@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useGenerationStore } from "@/lib/store";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface ProfileMenuProps {
   isOpen: boolean;
@@ -18,18 +19,41 @@ interface ProfileMenuProps {
 
 export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const generations = useGenerationStore((state) => state.generations);
+  const [shouldRender, setShouldRender] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      // Small delay to trigger animation
+      setTimeout(() => setIsAnimating(true), 10);
+    } else {
+      setIsAnimating(false);
+      // Wait for animation to complete before unmounting
+      const timer = setTimeout(() => setShouldRender(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
+  if (!shouldRender) return null;
 
   return (
     <>
       <div
-        className="fixed inset-0 z-40"
+        className={`fixed inset-0 z-40 transition-opacity duration-300 ease-out ${
+          isAnimating ? "opacity-100" : "opacity-0"
+        }`}
         onClick={onClose}
         aria-hidden="true"
       />
 
-      <div className="absolute right-0 top-12 z-50 w-96 bg-card rounded-lg border border-border shadow-xl overflow-hidden">
+      <div
+        className={`absolute right-0 top-12 z-50 w-96 bg-card rounded-lg border border-border shadow-xl overflow-hidden transition-all duration-300 ease-out origin-top-right ${
+          isAnimating
+            ? "opacity-100 scale-100 translate-y-0"
+            : "opacity-0 scale-95 -translate-y-2"
+        }`}
+      >
         <div className="p-4 space-y-4 max-h-[600px] overflow-y-auto">
           <div className="space-y-3">
             {generations.length === 0 ? (

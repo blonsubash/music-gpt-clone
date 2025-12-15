@@ -11,7 +11,7 @@ export function SidebarNavigation({
   onNavChange,
 }: SidebarNavigationProps) {
   return (
-    <nav className="p-4 border-b border-border">
+    <nav className="p-4 ">
       <div className="space-y-1">
         {NAVIGATION_ITEMS.map((item) => (
           <NavButton
@@ -26,4 +26,3 @@ export function SidebarNavigation({
     </nav>
   );
 }
-

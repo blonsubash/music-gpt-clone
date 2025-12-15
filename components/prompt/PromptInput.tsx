@@ -1,18 +1,18 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import {
-  Mic,
-  Link,
-  SlidersHorizontal,
-  ChevronDown,
-  ArrowRight,
-} from "lucide-react";
+import { ChevronDown, ArrowRight } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { CustomAnimate } from "@/components/ui/Animate";
 import { getRandomPlaceholder } from "@/lib/placeholderUtils";
 import { useSocketContext } from "@/components/providers/SocketProvider";
 import { useGenerationStore } from "@/lib/store";
+import {
+  AttachFileIcon,
+  ControlIcon,
+  InstrumentalIcon,
+} from "@/app/assets/icons";
+import Image from "next/image";
 
 interface PromptInputProps {
   placeholder?: string;
@@ -30,13 +30,17 @@ export function PromptInput({
     externalPlaceholder ?? getRandomPlaceholder()
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasPlayedInitialAnimation, setHasPlayedInitialAnimation] =
+    useState(false);
   const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { startGeneration, isConnected } = useSocketContext();
-  const { addGeneration, setCurrentGeneration } = useGenerationStore();
+  const { addGeneration, setCurrentGeneration, currentGeneration } =
+    useGenerationStore();
 
   const value = controlledValue ?? internalValue;
+  const isGenerating = currentGeneration?.status === "generating";
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -44,6 +48,15 @@ export function PromptInput({
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [value]);
+
+  // Trigger initial animation on first render
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setHasPlayedInitialAnimation(true);
+    }, 3000); // Duration matches the animation duration
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (externalPlaceholder) {
@@ -109,7 +122,6 @@ export function PromptInput({
 
       addGeneration(generation);
       setCurrentGeneration(generation);
-
       startGeneration(generation.id, promptText);
 
       if (!onChange) {
@@ -130,8 +142,12 @@ export function PromptInput({
   };
 
   return (
-    <div className="bg-card rounded-4xl p-6 border border-border relative transition-all duration-300 ease-in-out">
-      <div className="gap-4 relative">
+    <div
+      className={`prompt-input-container rounded-4xl relative transition-all duration-300 ease-in-out ${
+        isGenerating || !hasPlayedInitialAnimation ? "generating" : ""
+      }`}
+    >
+      <div className="bg-card rounded-4xl p-6 flex flex-col gap-4 relative z-[1]">
         <div className="relative transition-all duration-300 ease-in-out">
           <textarea
             ref={textareaRef}
@@ -163,40 +179,45 @@ export function PromptInput({
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <div className="flex items-center gap-2 justify-between">
-            <button
-              className="p-2 hover:bg-hover rounded-full transition-colors relative group"
-              aria-label="Microphone"
-              title="Microphone (U)"
-            >
-              <Mic className="w-5 h-5 text-text-secondary" />
-              <span className="absolute -bottom-1 -right-1 text-[10px] text-text-tertiary opacity-0 group-hover:opacity-100 transition-opacity">
-                U
-              </span>
+            <button className="p-1 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer">
+              <Image
+                src={AttachFileIcon}
+                alt="Attach file"
+                width={20}
+                height={20}
+              />
             </button>
-            <button
-              className="p-2 hover:bg-hover rounded-full transition-colors"
-              aria-label="Link"
-            >
-              <Link className="w-5 h-5 text-text-secondary" />
+            <button className="p-1 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer">
+              <Image
+                src={ControlIcon}
+                alt="Attach file"
+                width={20}
+                height={20}
+              />
             </button>
-            <button
-              className="p-2 hover:bg-hover rounded-full transition-colors"
-              aria-label="Settings"
-            >
-              <SlidersHorizontal className="w-5 h-5 text-text-secondary" />
+            <button className="p-1 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer">
+              <Image
+                src={InstrumentalIcon}
+                alt="Attach file"
+                width={20}
+                height={20}
+              />
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-hover rounded-full hover:bg-active transition-colors">
+            <button className="flex items-center gap-2 px-4 py-2 bg-hover rounded-full hover:bg-white/10  border border-border transition-colors cursor-pointer">
               <span className="text-sm text-text-tertiary">+ Lyrics</span>
             </button>
           </div>
 
-          <div className="flex items-center gap-2 ml-auto">
-            <button className="flex items-center gap-2 px-4 py-2 bg-hover rounded-full hover:bg-active transition-colors">
-              <span className="text-sm text-text-tertiary">Tools</span>
-              <ChevronDown className="w-4 h-4 text-text-secondary" />
+          <div className="flex items-center gap-2 ml-auto  ">
+            <button className="border-flow flex items-center gap-2 px-4 py-2 bg-hover rounded-full hover:bg-white/10 transition-colors cursor-pointer relative ">
+              <span className="text-sm text-text-tertiary relative z-10">
+                Tools
+              </span>
+              <ChevronDown className="w-4 h-4 text-text-secondary relative z-10" />
             </button>
+
             <button
-              className="p-3 bg-hover rounded-full hover:bg-active transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 bg-hover rounded-full hover:bg-white/10  transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer border border-border"
               aria-label="Submit"
               onClick={handleSubmit}
               disabled={!value.trim() || isSubmitting || !isConnected}

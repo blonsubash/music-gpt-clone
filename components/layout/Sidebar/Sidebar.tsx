@@ -14,7 +14,7 @@ interface SidebarProps {
 
 export function Sidebar({ activeNav, onNavChange }: SidebarProps) {
   return (
-    <aside className="w-64 bg-sidebar flex flex-col h-screen fixed left-0 top-0">
+    <aside className="w-64 bg-sidebar flex flex-col h-screen">
       <SidebarLogo />
       <SidebarSearch />
       <SidebarNavigation activeNav={activeNav} onNavChange={onNavChange} />
@@ -24,4 +24,3 @@ export function Sidebar({ activeNav, onNavChange }: SidebarProps) {
     </aside>
   );
 }
-

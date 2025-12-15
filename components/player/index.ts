@@ -1,0 +1,2 @@
+export { FloatingMusicPlayer } from "./FloatingMusicPlayer";
+

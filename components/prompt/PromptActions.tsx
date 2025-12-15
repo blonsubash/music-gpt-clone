@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 export function PromptActions() {
   return (
-    <div className="flex flex-wrap gap-3 mt-6">
+    <div className="flex flex-wrap justify-center gap-3 mt-6  max-w-4xl ">
       {ACTION_BUTTONS.map((action) => {
         const Icon = action.icon;
         const isPrimary = action.variant === "primary";
@@ -26,4 +26,3 @@ export function PromptActions() {
     </div>
   );
 }
-

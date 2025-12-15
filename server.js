@@ -13,6 +13,42 @@ const handle = app.getRequestHandler();
 // Store active generations for simulation
 const activeGenerations = new Map();
 
+/**
+ * Generate a random music image URL using SourceSplash (Unsplash Source replacement)
+ * Uses the generation ID as a seed for consistency
+ * Format: https://www.sourcesplash.com/i/random?q={query}
+ */
+function getRandomMusicImageUrl(seed) {
+  // Curated list of music-related search queries
+  const musicQueries = [
+    "music",
+    "guitar",
+    "piano",
+    "vinyl",
+    "headphones",
+    "microphone",
+    "concert",
+    "dj",
+    "singer",
+    "band",
+    "music studio",
+    "keyboard",
+    "drums",
+    "violin",
+    "saxophone",
+  ];
+
+  // Use the seed to pick a consistent query for this generation
+  const queryIndex = seed
+    .split("")
+    .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const query = musicQueries[queryIndex % musicQueries.length];
+
+  // Use SourceSplash API - replacement for deprecated Unsplash Source
+  // Returns random images based on query, works well for 400x400 thumbnails
+  return `https://www.sourcesplash.com/i/random?q=${encodeURIComponent(query)}`;
+}
+
 app.prepare().then(() => {
   const httpServer = createServer(async (req, res) => {
     try {
@@ -99,7 +135,7 @@ function simulateGeneration(socket, id, prompt) {
         status: "completed",
         progress: 100,
         audioUrl: `/audio/generated-${id}.mp3`, // Mock URL
-        thumbnailUrl: `/images/thumbnail-${id}.jpg`, // Mock URL
+        thumbnailUrl: getRandomMusicImageUrl(id), // Random Unsplash music image
         completedAt: new Date().toISOString(),
       });
 
