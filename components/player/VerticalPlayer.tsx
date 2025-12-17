@@ -75,7 +75,7 @@ export function VerticalPlayer({
 
         <div className="flex items-center justify-center gap-2 mb-3">
           <button
-            className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
+            className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
             aria-label="Previous"
           >
             <SkipBack className="w-4 h-4" />
@@ -86,13 +86,13 @@ export function VerticalPlayer({
             aria-label={isPlaying ? "Pause" : "Play"}
           >
             {isPlaying ? (
-              <Pause className="w-5 h-5 fill-current" />
+              <Pause className="w-5 h-5 fill-current cursor-pointer" />
             ) : (
-              <Play className="w-5 h-5 fill-current ml-0.5" />
+              <Play className="w-5 h-5 fill-current ml-0.5 cursor-pointer" />
             )}
           </button>
           <button
-            className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
+            className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
             aria-label="Next"
           >
             <SkipForward className="w-4 h-4" />
@@ -104,7 +104,7 @@ export function VerticalPlayer({
             onClick={() => setIsLiked(!isLiked)}
             className={`p-1.5 hover:bg-hover rounded-full transition-colors ${
               isLiked ? "text-accent-red" : "text-text-secondary"
-            }`}
+            } cursor-pointer`}
             aria-label="Like"
           >
             <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
@@ -113,13 +113,13 @@ export function VerticalPlayer({
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => setVolume(volume === 0 ? 1 : 0)}
-              className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
+              className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
               aria-label={volume === 0 ? "Unmute" : "Mute"}
             >
               {volume === 0 ? (
-                <VolumeX className="w-4 h-4" />
+                <VolumeX className="w-4 h-4 cursor-pointer" />
               ) : (
-                <Volume2 className="w-4 h-4" />
+                <Volume2 className="w-4 h-4 cursor-pointer" />
               )}
             </button>
             <input
@@ -137,7 +137,7 @@ export function VerticalPlayer({
             className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
             aria-label="More options"
           >
-            <MoreHorizontal className="w-4 h-4" />
+            <MoreHorizontal className="w-4 h-4 cursor-pointer" />
           </button>
         </div>
       </div>

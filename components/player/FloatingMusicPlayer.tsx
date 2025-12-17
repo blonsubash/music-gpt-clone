@@ -22,11 +22,6 @@ export function FloatingMusicPlayer() {
     setCurrentGeneration,
   } = useGenerationStore();
 
-  console.log(
-    "FloatingMusicPlayer render - currentGeneration:",
-    currentGeneration
-  );
-
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isLiked, setIsLiked] = useState(false);
   const [layout, setLayout] = useState<LayoutMode>("horizontal");
@@ -134,7 +129,7 @@ export function FloatingMusicPlayer() {
         <div className="absolute top-3 right-3 z-10 flex items-center gap-2">
           <button
             onClick={toggleLayout}
-            className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary bg-card/80"
+            className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary bg-card/80 cursor-pointer"
             aria-label={`Switch to ${
               layout === "vertical" ? "horizontal" : "vertical"
             } layout`}
@@ -148,7 +143,7 @@ export function FloatingMusicPlayer() {
 
           <button
             onClick={handleClose}
-            className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary bg-card/80"
+            className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary bg-card/80 cursor-pointer"
             aria-label="Close player"
           >
             <X className="w-4 h-4" />

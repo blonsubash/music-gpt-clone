@@ -12,19 +12,25 @@ export function useSocket() {
   );
 
   useEffect(() => {
-    const socket = io({
+    const socket = io("http://localhost:3000", {
       path: "/socket.io",
+      transports: ["websocket", "polling"],
     });
 
     socketRef.current = socket;
 
     socket.on("connect", () => {
-      console.log("WebSocket connected");
+      console.log("WebSocket connected:", socket.id);
       setIsConnected(true);
     });
 
     socket.on("disconnect", () => {
       console.log("WebSocket disconnected");
+      setIsConnected(false);
+    });
+
+    socket.on("connect_error", (error) => {
+      console.error("WebSocket connection error:", error);
       setIsConnected(false);
     });
 

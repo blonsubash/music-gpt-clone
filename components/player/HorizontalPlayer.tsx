@@ -78,7 +78,7 @@ export function HorizontalPlayer({
 
           <div className="flex items-center gap-1 md:gap-2">
             <button
-              className="p-1 md:p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
+              className="p-1 md:p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
               aria-label="Previous"
             >
               <SkipBack className="w-3.5 h-3.5 md:w-4 md:h-4" />
@@ -89,13 +89,13 @@ export function HorizontalPlayer({
               aria-label={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? (
-                <Pause className="w-4 h-4 md:w-5 md:h-5 fill-current" />
+                <Pause className="w-4 h-4 md:w-5 md:h-5 fill-current cursor-pointer" />
               ) : (
-                <Play className="w-4 h-4 md:w-5 md:h-5 fill-current ml-0.5" />
+                <Play className="w-4 h-4 md:w-5 md:h-5 fill-current ml-0.5 cursor-pointer" />
               )}
             </button>
             <button
-              className="p-1 md:p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
+              className="p-1 md:p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
               aria-label="Next"
             >
               <SkipForward className="w-3.5 h-3.5 md:w-4 md:h-4" />
@@ -105,9 +105,9 @@ export function HorizontalPlayer({
           <div className="flex items-center gap-1 md:gap-2">
             <button
               onClick={() => setIsLiked(!isLiked)}
-              className={`p-1 md:p-1.5 hover:bg-hover rounded-full transition-colors ${
+              className={`p-1 md:p-1.5 hover:bg-hover rounded-full transition-colors  ${
                 isLiked ? "text-accent-red" : "text-text-secondary"
-              }`}
+              } cursor-pointer`}
               aria-label="Like"
             >
               <Heart
@@ -123,9 +123,9 @@ export function HorizontalPlayer({
               aria-label={volume === 0 ? "Unmute" : "Mute"}
             >
               {volume === 0 ? (
-                <VolumeX className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                <VolumeX className="w-3.5 h-3.5 md:w-4 md:h-4 cursor-pointer" />
               ) : (
-                <Volume2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                <Volume2 className="w-3.5 h-3.5 md:w-4 md:h-4 cursor-pointer" />
               )}
             </button>
 
@@ -143,7 +143,7 @@ export function HorizontalPlayer({
               className="hidden md:block p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
               aria-label="More options"
             >
-              <MoreHorizontal className="w-4 h-4" />
+              <MoreHorizontal className="w-4 h-4 cursor-pointer" />
             </button>
           </div>
         </div>

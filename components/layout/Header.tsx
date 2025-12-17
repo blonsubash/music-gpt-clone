@@ -16,6 +16,8 @@ export function Header() {
   const generationCount = generations.length;
 
   useEffect(() => {
+    if (typeof document === "undefined") return;
+
     const handleClickOutside = (event: MouseEvent) => {
       if (
         profileButtonRef.current &&
@@ -37,10 +39,10 @@ export function Header() {
 
   return (
     <div className="flex justify-end items-center gap-4 mb-8 relative">
-      <button className="px-4 py-2 text-sm hover:text-text-tertiary transition-colors text-foreground">
+      <button className="px-4 py-2 text-sm hover:text-text-tertiary transition-colors text-foreground cursor-pointer">
         Sign in
       </button>
-      <button className="px-4 py-2 text-sm bg-background-dark rounded-lg hover:bg-active transition-colors text-foreground">
+      <button className="px-4 py-2 text-sm bg-background-dark rounded-lg hover:bg-active transition-colors text-foreground cursor-pointer">
         Get MusicGPT Free
       </button>
 

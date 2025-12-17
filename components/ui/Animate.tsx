@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, HTMLAttributes } from "react";
-import { motion, Variants, Transition } from "framer-motion";
+import { motion, Variants, Transition, Easing } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export type FadeDirection =
@@ -13,14 +13,28 @@ export type FadeDirection =
   | "none";
 
 export interface AnimateProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
+  extends Omit<
+    HTMLAttributes<HTMLDivElement>,
+    | "children"
+    | "onDrag"
+    | "onDragEnd"
+    | "onDragStart"
+    | "onDragEnter"
+    | "onDragExit"
+    | "onDragLeave"
+    | "onDragOver"
+    | "onDrop"
+    | "onAnimationStart"
+    | "onAnimationEnd"
+    | "onAnimationIteration"
+  > {
   children: ReactNode;
   fadeIn?: boolean;
   fadeOut?: boolean;
   direction?: FadeDirection;
   duration?: number;
   delay?: number;
-  easing?: string | number[];
+  easing?: Easing | Easing[];
   className?: string;
   trigger?: "mount" | "hover" | "inView";
   stagger?: number;
@@ -32,7 +46,7 @@ export interface AnimateProps
 const getDirectionVariants = (
   direction: FadeDirection,
   distance: number
-): { x?: number; y?: number } => {
+): { x?: number; y?: number; scale?: number } => {
   switch (direction) {
     case "up":
       return { y: distance };
@@ -87,7 +101,7 @@ export function CustomAnimate({
   direction = "up",
   duration = 0.5,
   delay = 0,
-  easing = [0.4, 0, 0.2, 1], // Default ease-in-out
+  easing = [0.4, 0, 0.2, 1],
   className,
   trigger = "mount",
   stagger,

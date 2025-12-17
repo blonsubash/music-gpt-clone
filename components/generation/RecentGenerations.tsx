@@ -17,7 +17,6 @@ export function RecentGenerations() {
   if (generations.length === 0) {
     return null;
   }
-  console.log(generations);
 
   return (
     <div className="w-full max-w-4xl mx-auto mt-8">
@@ -44,9 +43,6 @@ export function RecentGenerations() {
                     : "cursor-pointer hover:bg-white/5"
                 }`}
                 onClick={() => {
-                  console.log("Generation clicked:", generation);
-                  console.log("Status:", generation.status);
-                  console.log("AudioURL:", generation.audioUrl);
                   if (
                     generation.status === "completed" &&
                     generation.audioUrl
@@ -62,7 +58,7 @@ export function RecentGenerations() {
                 }}
               >
                 <div className="flex items-center gap-4 p-4">
-                  <div className="relative w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden bg-hover">
+                  <div className="relative w-20 h-20 shrink-0 rounded-xl overflow-hidden bg-hover">
                     <Image
                       src={getThumbnailWithFallback(
                         generation.thumbnailUrl,
@@ -77,7 +73,6 @@ export function RecentGenerations() {
                       }`}
                     />
 
-                    {/* Play button overlay on hover */}
                     {!isGenerating && !isFailed && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out">
                         <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 transform scale-90 group-hover:scale-100 transition-transform duration-300 ease-out">
@@ -105,9 +100,8 @@ export function RecentGenerations() {
 
                     {isFailed && (
                       <div className="absolute inset-0 bg-black/50 overflow-hidden">
-                        {/* Red background from bottom to 50% */}
                         <div
-                          className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-red-500/60 via-red-500/40 to-red-400/30 transition-all duration-500 ease-out"
+                          className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-red-500/60 via-red-500/40 to-red-400/30 transition-all duration-500 ease-out"
                           style={{
                             height: `${generation.progress}%`,
                           }}
@@ -137,7 +131,7 @@ export function RecentGenerations() {
                         onClick={(e) => {
                           e.stopPropagation();
                         }}
-                        className="p-2.5 rounded-lg hover:bg-white/10 transition-colors duration-200"
+                        className="p-2.5 rounded-lg hover:bg-white/10 transition-colors duration-200 cursor-pointer"
                         aria-label="Like"
                       >
                         <ThumbsUp className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
@@ -146,7 +140,7 @@ export function RecentGenerations() {
                         onClick={(e) => {
                           e.stopPropagation();
                         }}
-                        className="p-2.5 rounded-lg hover:bg-white/10 transition-colors duration-200"
+                        className="p-2.5 rounded-lg hover:bg-white/10 transition-colors duration-200 cursor-pointer"
                         aria-label="Dislike"
                       >
                         <ThumbsDown className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
@@ -158,7 +152,7 @@ export function RecentGenerations() {
                         onClick={(e) => {
                           e.stopPropagation();
                         }}
-                        className="p-2.5 rounded-lg hover:bg-white/10 transition-colors duration-200"
+                        className="p-2.5 rounded-lg hover:bg-white/10 transition-colors duration-200 cursor-pointer"
                         aria-label="More options"
                       >
                         <MoreHorizontal className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />

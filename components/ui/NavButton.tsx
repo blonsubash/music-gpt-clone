@@ -20,7 +20,7 @@ export function NavButton({
     <button
       onClick={onClick}
       className={cn(
-        "w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors",
+        "w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors cursor-pointer",
         isActive
           ? "bg-active text-foreground"
           : "text-text-secondary hover:bg-hover hover:text-foreground",
@@ -32,4 +32,3 @@ export function NavButton({
     </button>
   );
 }
-

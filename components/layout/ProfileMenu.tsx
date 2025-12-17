@@ -47,20 +47,26 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const setIsProfileMenuOpen = useGenerationStore(
     (state) => state.setIsProfileMenuOpen
   );
-  const [shouldRender, setShouldRender] = useState(false);
+  const [shouldRender, setShouldRender] = useState(isOpen);
   const [isAnimating, setIsAnimating] = useState(false);
+
+  if (isOpen && !shouldRender) {
+    setShouldRender(true);
+  }
 
   useEffect(() => {
     if (isOpen) {
-      setShouldRender(true);
-
-      setTimeout(() => setIsAnimating(true), 10);
-    } else {
-      setIsAnimating(false);
-      const timer = setTimeout(() => setShouldRender(false), 300);
+      const timer = setTimeout(() => setIsAnimating(true), 10);
       return () => clearTimeout(timer);
+    } else {
+      const animationTimer = setTimeout(() => setIsAnimating(false), 0);
+      const renderTimer = setTimeout(() => setShouldRender(false), 300);
+      return () => {
+        clearTimeout(animationTimer);
+        clearTimeout(renderTimer);
+      };
     }
-  }, [isOpen]);
+  }, [isOpen, shouldRender]);
 
   if (!shouldRender) return null;
 
@@ -92,7 +98,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                 <p className="text-text-secondary text-xs">@subashlama100</p>
               </div>
               <button
-                className="p-2 hover:bg-hover rounded-lg transition-colors"
+                className="p-2 hover:bg-hover rounded-lg transition-colors cursor-pointer"
                 aria-label="Settings"
               >
                 <Settings className="w-5 h-5 text-text-secondary" />
@@ -105,7 +111,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                   300 / 500 credits
                 </span>
                 <button
-                  className="p-0.5 hover:bg-hover rounded transition-colors"
+                  className="p-0.5 hover:bg-hover rounded transition-colors cursor-pointer"
                   aria-label="Credits info"
                 >
                   <Info className="w-4 h-4 text-text-secondary" />
@@ -141,7 +147,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                     setInvalidPrompt(null);
                     setIsProfileMenuOpen(false);
                   }}
-                  className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors"
+                  className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors cursor-pointer"
                 >
                   Retry
                 </button>
@@ -161,7 +167,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
             <div className="bg-linear-to-br from-gray-800/50 to-gray-900/50 rounded-xl p-4 border border-yellow-500/30 relative">
               <button
                 onClick={() => setInsufficientCredit(false)}
-                className="absolute top-3 right-3 p-1 hover:bg-white/10 rounded-full transition-colors"
+                className="absolute top-3 right-3 p-1 hover:bg-white/10 rounded-full transition-colors cursor-pointer"
                 aria-label="Close"
               >
                 <X className="w-4 h-4 text-gray-400" />
@@ -179,7 +185,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                   </p>
                 </div>
               </div>
-              <button className="w-full px-6 py-2.5 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors border border-white/20">
+              <button className="w-full px-6 py-2.5 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors border border-white/20 cursor-pointer">
                 Top Up
               </button>
             </div>
@@ -189,7 +195,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
             <div className="bg-linear-to-br from-gray-800/50 to-gray-900/50 rounded-xl p-4 border border-red-500/30 relative">
               <button
                 onClick={() => setFailedGeneration(null)}
-                className="absolute top-3 right-3 p-1 hover:bg-white/10 rounded-full transition-colors"
+                className="absolute top-3 right-3 p-1 hover:bg-white/10 rounded-full transition-colors cursor-pointer"
                 aria-label="Close"
               >
                 <X className="w-4 h-4 text-gray-400" />
@@ -217,7 +223,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                     setFailedGeneration(null);
                     setIsProfileMenuOpen(false);
                   }}
-                  className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors"
+                  className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors cursor-pointer"
                 >
                   Retry
                 </button>
@@ -225,7 +231,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                   onClick={() => {
                     navigator.clipboard.writeText(failedGeneration.prompt);
                   }}
-                  className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors"
+                  className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors cursor-pointer"
                 >
                   Copy prompt
                 </button>
@@ -336,14 +342,14 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                       <>
                         <button
                           onClick={(e) => e.stopPropagation()}
-                          className="p-1.5 hover:bg-active rounded transition-colors"
+                          className="p-1.5 hover:bg-active rounded transition-colors cursor-pointer"
                           aria-label="Like"
                         >
                           <ThumbsUp className="w-4 h-4 text-text-secondary fill-text-secondary" />
                         </button>
                         <button
                           onClick={(e) => e.stopPropagation()}
-                          className="p-1.5 hover:bg-active rounded transition-colors"
+                          className="p-1.5 hover:bg-active rounded transition-colors cursor-pointer"
                           aria-label="Dislike"
                         >
                           <ThumbsDown className="w-4 h-4 text-text-secondary" />
@@ -355,14 +361,14 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                         <>
                           <button
                             onClick={(e) => e.stopPropagation()}
-                            className="p-1.5 hover:bg-active rounded transition-colors"
+                            className="p-1.5 hover:bg-active rounded transition-colors cursor-pointer"
                             aria-label="Download"
                           >
                             <Download className="w-4 h-4 text-text-secondary" />
                           </button>
                           <button
                             onClick={(e) => e.stopPropagation()}
-                            className="p-1.5 hover:bg-active rounded transition-colors"
+                            className="p-1.5 hover:bg-active rounded transition-colors cursor-pointer"
                             aria-label="More options"
                           >
                             <MoreVertical className="w-4 h-4 text-text-secondary" />

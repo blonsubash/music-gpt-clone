@@ -14,6 +14,7 @@ import {
 } from "@/app/assets/icons";
 import Image from "next/image";
 import { useTooltip } from "@/hooks/useTooltip";
+import { useGenerateMusicAPI } from "@/hooks/useGenerateMusicAPI";
 
 interface PromptInputProps {
   placeholder?: string;
@@ -32,7 +33,6 @@ export function PromptInput({
   const [placeholder, setPlaceholder] = useState(
     externalPlaceholder ?? getRandomPlaceholder()
   );
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasPlayedInitialAnimation, setHasPlayedInitialAnimation] =
     useState(false);
   const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -47,6 +47,7 @@ export function PromptInput({
     setFailedGeneration,
     setIsProfileMenuOpen,
   } = useGenerationStore();
+  const { generateMusic, isSubmitting } = useGenerateMusicAPI();
 
   const value = controlledValue ?? internalValue;
   const isGenerating = generations.some((gen) => gen.status === "generating");
@@ -177,27 +178,9 @@ export function PromptInput({
       return;
     }
 
-    setIsSubmitting(true);
+    const generation = await generateMusic(promptText);
 
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt: promptText }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to start generation");
-      }
-
-      const data = await response.json();
-      const generation = {
-        ...data.generation,
-        createdAt: new Date(data.generation.createdAt),
-      };
-
+    if (generation) {
       addGeneration(generation);
       startGeneration(generation.id, promptText);
 
@@ -206,10 +189,6 @@ export function PromptInput({
       } else {
         setInternalValue("");
       }
-    } catch (error) {
-      console.error("Error submitting prompt:", error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -223,22 +202,26 @@ export function PromptInput({
   const showAnimation =
     !hasPlayedInitialAnimation || isSubmitting || isGenerating;
 
-  tooltip("#attach-file-button", {
-    content: "Attach file",
-    arrow: true,
-    animation: "fade",
-  });
+  useEffect(() => {
+    tooltip("#attach-file-button", {
+      content: "Attach file",
+      arrow: true,
+      animation: "fade",
+    });
 
-  tooltip("#instrumental-button", {
-    content: "Instrumental mode",
-    arrow: true,
-    animation: "fade",
-  });
-  tooltip("#control-button", {
-    content: "Control options",
-    arrow: true,
-    animation: "fade",
-  });
+    tooltip("#instrumental-button", {
+      content: "Instrumental mode",
+      arrow: true,
+      animation: "fade",
+    });
+
+    tooltip("#control-button", {
+      content: "Control options",
+      arrow: true,
+      animation: "fade",
+    });
+  }, [tooltip]);
+
   return (
     <div
       className={`prompt-input-container rounded-4xl relative transition-all duration-300 ease-in-out ${
