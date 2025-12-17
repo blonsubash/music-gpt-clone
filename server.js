@@ -4,49 +4,29 @@ const next = require("next");
 const { Server } = require("socket.io");
 
 const dev = process.env.NODE_ENV !== "production";
-const hostname = "www.subashbholanlama.com.np";
+const hostname = "localhost";
 const port = parseInt(process.env.PORT || "3000", 10);
 
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
-// Store active generations for simulation
 const activeGenerations = new Map();
 
 /**
- * Generate a random music image URL using SourceSplash (Unsplash Source replacement)
+ * Get a music thumbnail image identifier
+ * Returns an identifier (image1, image2, etc.) that will be mapped to actual URLs on the client
  * Uses the generation ID as a seed for consistency
- * Format: https://www.sourcesplash.com/i/random?q={query}
  */
-function getRandomMusicImageUrl(seed) {
-  // Curated list of music-related search queries
-  const musicQueries = [
-    "music",
-    "guitar",
-    "piano",
-    "vinyl",
-    "headphones",
-    "microphone",
-    "concert",
-    "dj",
-    "singer",
-    "band",
-    "music studio",
-    "keyboard",
-    "drums",
-    "violin",
-    "saxophone",
-  ];
+function getThumbnailImageId(seed) {
+  // Available image identifiers that map to actual URLs on the client
+  const imageIds = ["image1", "image2", "image3", "image4", "image5", "image6"];
 
-  // Use the seed to pick a consistent query for this generation
-  const queryIndex = seed
+  // Use the seed to pick a consistent image ID for this generation
+  const index = seed
     .split("")
     .reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  const query = musicQueries[queryIndex % musicQueries.length];
 
-  // Use SourceSplash API - replacement for deprecated Unsplash Source
-  // Returns random images based on query, works well for 400x400 thumbnails
-  return `https://www.sourcesplash.com/i/random?q=${encodeURIComponent(query)}`;
+  return imageIds[index % imageIds.length];
 }
 
 app.prepare().then(() => {
@@ -103,18 +83,16 @@ app.prepare().then(() => {
  * Simulate music generation with progressive status updates
  */
 function simulateGeneration(socket, id, prompt) {
-  // Clear any existing simulation for this ID
   if (activeGenerations.has(id)) {
     clearInterval(activeGenerations.get(id));
   }
 
   let progress = 0;
   const totalSteps = 100;
-  const updateInterval = 100; // Update every 100ms
-  const totalDuration = 8000; // Total generation time: 8 seconds
+  const updateInterval = 100;
+  const totalDuration = 8000;
   const progressIncrement = totalSteps / (totalDuration / updateInterval);
 
-  // Emit initial status
   socket.emit("generation-update", {
     id,
     status: "generating",
@@ -129,19 +107,18 @@ function simulateGeneration(socket, id, prompt) {
       clearInterval(interval);
       activeGenerations.delete(id);
 
-      // Emit completion
       socket.emit("generation-update", {
         id,
         status: "completed",
         progress: 100,
-        audioUrl: `/audio/generated-${id}.mp3`, // Mock URL
-        thumbnailUrl: getRandomMusicImageUrl(id), // Random Unsplash music image
+
+        audioUrl: "/audio/sample.mp3",
+        thumbnailUrl: getThumbnailImageId(id),
         completedAt: new Date().toISOString(),
       });
 
       console.log("Generation completed:", id);
     } else {
-      // Emit progress update
       socket.emit("generation-update", {
         id,
         status: "generating",

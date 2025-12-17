@@ -36,11 +36,17 @@ export function PromptInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { startGeneration, isConnected } = useSocketContext();
-  const { addGeneration, setCurrentGeneration, currentGeneration } =
-    useGenerationStore();
+  const {
+    addGeneration,
+    generations,
+    setInvalidPrompt,
+    setInsufficientCredit,
+    setFailedGeneration,
+    setIsProfileMenuOpen,
+  } = useGenerationStore();
 
   const value = controlledValue ?? internalValue;
-  const isGenerating = currentGeneration?.status === "generating";
+  const isGenerating = generations.some((gen) => gen.status === "generating");
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -49,11 +55,10 @@ export function PromptInput({
     }
   }, [value]);
 
-  // Trigger initial animation on first render
   useEffect(() => {
     const timer = setTimeout(() => {
       setHasPlayedInitialAnimation(true);
-    }, 3000); // Duration matches the animation duration
+    }, 4000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -99,6 +104,76 @@ export function PromptInput({
       return;
     }
 
+    if (promptText.toLowerCase().includes("invalid")) {
+      setInvalidPrompt(promptText);
+      setIsProfileMenuOpen(true);
+      if (onChange) {
+        onChange("");
+      } else {
+        setInternalValue("");
+      }
+      return;
+    }
+
+    if (
+      promptText.toLowerCase().includes("credit") ||
+      promptText.toLowerCase().includes("insufficient")
+    ) {
+      setInsufficientCredit(true);
+      setIsProfileMenuOpen(true);
+      if (onChange) {
+        onChange("");
+      } else {
+        setInternalValue("");
+      }
+      return;
+    }
+
+    if (promptText.toLowerCase().includes("failed")) {
+      const failedGeneration = {
+        id: `gen-${Date.now()}`,
+        prompt: promptText,
+        title: "Failed Generation",
+        status: "generating" as const,
+        progress: 0,
+        createdAt: new Date(),
+      };
+
+      addGeneration(failedGeneration);
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 10;
+        if (progress <= 50) {
+          useGenerationStore.getState().updateGeneration(failedGeneration.id, {
+            progress,
+          });
+        } else {
+          clearInterval(interval);
+          const updatedFailedGen = {
+            ...failedGeneration,
+            status: "failed" as const,
+            progress: 50,
+            error: "Generation failed due to an error",
+          };
+          useGenerationStore.getState().updateGeneration(failedGeneration.id, {
+            status: "failed",
+            progress: 50,
+            error: "Generation failed due to an error",
+          });
+          setFailedGeneration(updatedFailedGen);
+          setIsProfileMenuOpen(true);
+        }
+      }, 200);
+
+      if (onChange) {
+        onChange("");
+      } else {
+        setInternalValue("");
+      }
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -121,10 +196,11 @@ export function PromptInput({
       };
 
       addGeneration(generation);
-      setCurrentGeneration(generation);
       startGeneration(generation.id, promptText);
 
-      if (!onChange) {
+      if (onChange) {
+        onChange("");
+      } else {
         setInternalValue("");
       }
     } catch (error) {
@@ -141,10 +217,13 @@ export function PromptInput({
     }
   };
 
+  const showAnimation =
+    !hasPlayedInitialAnimation || isSubmitting || isGenerating;
+
   return (
     <div
       className={`prompt-input-container rounded-4xl relative transition-all duration-300 ease-in-out ${
-        isGenerating || !hasPlayedInitialAnimation ? "generating" : ""
+        showAnimation ? "generating" : ""
       }`}
     >
       <div className="bg-card rounded-4xl p-6 flex flex-col gap-4 relative z-[1]">

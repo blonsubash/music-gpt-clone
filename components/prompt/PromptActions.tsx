@@ -14,7 +14,7 @@ export function PromptActions() {
             className={cn(
               "flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all",
               isPrimary
-                ? "bg-gradient-to-r from-accent-yellow to-accent-orange hover:opacity-90"
+                ? "bg-linear-to-r from-accent-yellow to-accent-orange hover:opacity-90"
                 : "bg-hover hover:bg-active"
             )}
           >

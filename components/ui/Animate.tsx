@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, HTMLAttributes } from "react";
 import { motion, Variants, Transition } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +12,8 @@ export type FadeDirection =
   | "center"
   | "none";
 
-export interface AnimateProps {
+export interface AnimateProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   children: ReactNode;
   fadeIn?: boolean;
   fadeOut?: boolean;
@@ -93,6 +94,7 @@ export function CustomAnimate({
   staggerChildren = false,
   once = true,
   distance = 20,
+  ...htmlProps
 }: AnimateProps) {
   const variants = createVariants(fadeIn, fadeOut, direction, distance);
 
@@ -127,6 +129,7 @@ export function CustomAnimate({
         variants={staggerChildren ? containerVariants : variants}
         transition={transition}
         className={cn(className)}
+        {...htmlProps}
       >
         {children}
       </motion.div>
@@ -141,6 +144,7 @@ export function CustomAnimate({
         whileHover={{ scale: 1.05 }}
         transition={transition}
         className={cn(className)}
+        {...htmlProps}
       >
         {children}
       </motion.div>
@@ -158,11 +162,16 @@ export function CustomAnimate({
         variants={staggerChildren ? containerVariants : variants}
         transition={transition}
         className={cn(className)}
+        {...htmlProps}
       >
         {children}
       </motion.div>
     );
   }
 
-  return <div className={cn(className)}>{children}</div>;
+  return (
+    <div className={cn(className)} {...htmlProps}>
+      {children}
+    </div>
+  );
 }

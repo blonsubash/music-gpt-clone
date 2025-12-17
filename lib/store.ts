@@ -9,8 +9,9 @@ export type GenerationStatus =
 export interface Generation {
   id: string;
   prompt: string;
+  title?: string;
   status: GenerationStatus;
-  progress: number; // 0-100
+  progress: number;
   audioUrl?: string;
   thumbnailUrl?: string;
   createdAt: Date;
@@ -25,6 +26,10 @@ interface GenerationStore {
   currentTime: number;
   duration: number;
   volume: number;
+  invalidPrompt: string | null;
+  insufficientCredit: boolean;
+  failedGeneration: Generation | null;
+  isProfileMenuOpen: boolean;
   addGeneration: (generation: Generation) => void;
   updateGeneration: (id: string, updates: Partial<Generation>) => void;
   setCurrentGeneration: (generation: Generation | null) => void;
@@ -33,6 +38,10 @@ interface GenerationStore {
   setCurrentTime: (time: number) => void;
   setDuration: (duration: number) => void;
   setVolume: (volume: number) => void;
+  setInvalidPrompt: (prompt: string | null) => void;
+  setInsufficientCredit: (insufficient: boolean) => void;
+  setFailedGeneration: (generation: Generation | null) => void;
+  setIsProfileMenuOpen: (isOpen: boolean) => void;
 }
 
 export const useGenerationStore = create<GenerationStore>((set, get) => ({
@@ -42,6 +51,10 @@ export const useGenerationStore = create<GenerationStore>((set, get) => ({
   currentTime: 0,
   duration: 0,
   volume: 1,
+  invalidPrompt: null,
+  insufficientCredit: false,
+  failedGeneration: null,
+  isProfileMenuOpen: false,
 
   addGeneration: (generation) =>
     set((state) => ({
@@ -68,4 +81,9 @@ export const useGenerationStore = create<GenerationStore>((set, get) => ({
   setCurrentTime: (currentTime) => set({ currentTime }),
   setDuration: (duration) => set({ duration }),
   setVolume: (volume) => set({ volume }),
+  setInvalidPrompt: (prompt) => set({ invalidPrompt: prompt }),
+  setInsufficientCredit: (insufficient) =>
+    set({ insufficientCredit: insufficient }),
+  setFailedGeneration: (generation) => set({ failedGeneration: generation }),
+  setIsProfileMenuOpen: (isOpen) => set({ isProfileMenuOpen: isOpen }),
 }));

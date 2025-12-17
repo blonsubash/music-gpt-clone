@@ -7,10 +7,15 @@ import {
   Download,
   MoreVertical,
   Music,
+  Info,
+  ChevronRight,
+  Settings,
+  X,
 } from "lucide-react";
 import { useGenerationStore } from "@/lib/store";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { getThumbnailUrl } from "@/lib/imageUtils";
 
 interface ProfileMenuProps {
   isOpen: boolean;
@@ -19,17 +24,39 @@ interface ProfileMenuProps {
 
 export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const generations = useGenerationStore((state) => state.generations);
+  const setCurrentGeneration = useGenerationStore(
+    (state) => state.setCurrentGeneration
+  );
+  const setIsPlaying = useGenerationStore((state) => state.setIsPlaying);
+  const invalidPrompt = useGenerationStore((state) => state.invalidPrompt);
+  const setInvalidPrompt = useGenerationStore(
+    (state) => state.setInvalidPrompt
+  );
+  const insufficientCredit = useGenerationStore(
+    (state) => state.insufficientCredit
+  );
+  const setInsufficientCredit = useGenerationStore(
+    (state) => state.setInsufficientCredit
+  );
+  const failedGeneration = useGenerationStore(
+    (state) => state.failedGeneration
+  );
+  const setFailedGeneration = useGenerationStore(
+    (state) => state.setFailedGeneration
+  );
+  const setIsProfileMenuOpen = useGenerationStore(
+    (state) => state.setIsProfileMenuOpen
+  );
   const [shouldRender, setShouldRender] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true);
-      // Small delay to trigger animation
+
       setTimeout(() => setIsAnimating(true), 10);
     } else {
       setIsAnimating(false);
-      // Wait for animation to complete before unmounting
       const timer = setTimeout(() => setShouldRender(false), 300);
       return () => clearTimeout(timer);
     }
@@ -40,7 +67,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   return (
     <>
       <div
-        className={`fixed inset-0 z-40 transition-opacity duration-300 ease-out ${
+        className={`fixed inset-0 z-40 transition-opacity duration-300 ease-out  ${
           isAnimating ? "opacity-100" : "opacity-0"
         }`}
         onClick={onClose}
@@ -48,13 +75,164 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
       />
 
       <div
-        className={`absolute right-0 top-12 z-50 w-96 bg-card rounded-lg border border-border shadow-xl overflow-hidden transition-all duration-300 ease-out origin-top-right ${
+        className={`absolute right-0 top-13 z-50 w-96 bg-card rounded-2xl border border-border shadow-xl overflow-hidden transition-all duration-300 ease-out origin-top-right ${
           isAnimating
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 scale-95 -translate-y-2"
         }`}
       >
-        <div className="p-4 space-y-4 max-h-[600px] overflow-y-auto">
+        <div className="p-6 space-y-4 max-h-[600px] overflow-y-auto custom-scrollbar">
+          <div className="pb-4 border-b border-border space-y-4">
+            <div className="flex gap-4 items-center">
+              <div className="w-14 h-14 bg-linear-to-br from-gray-700 to-gray-800 rounded-full flex items-center justify-center shrink-0 border-2 border-gray-600">
+                <span className="text-2xl font-medium text-white">S</span>
+              </div>
+              <div className="flex-1 min-w-0  ">
+                <h3 className="text-white font-semibold text-md">Subash</h3>
+                <p className="text-text-secondary text-xs">@subashlama100</p>
+              </div>
+              <button
+                className="p-2 hover:bg-hover rounded-lg transition-colors"
+                aria-label="Settings"
+              >
+                <Settings className="w-5 h-5 text-text-secondary" />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-hover/50 rounded-lg">
+              <div className="flex items-center gap-2">
+                <span className="text-white font-medium">
+                  300 / 500 credits
+                </span>
+                <button
+                  className="p-0.5 hover:bg-hover rounded transition-colors"
+                  aria-label="Credits info"
+                >
+                  <Info className="w-4 h-4 text-text-secondary" />
+                </button>
+              </div>
+              <button className="flex items-center gap-1 text-text-secondary hover:text-white transition-colors">
+                <span className="text-sm font-medium">Upgrade</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {invalidPrompt && (
+            <div className="bg-hover rounded-xl p-4 space-y-3 border border-border">
+              <div className="flex gap-3 items-start">
+                <div className="w-12 h-12 bg-linear-to-br from-yellow-400 to-orange-400 rounded-2xl flex items-center justify-center shrink-0 text-2xl">
+                  😢
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-white font-semibold text-sm mb-1">
+                    Invalid Prompt
+                  </h4>
+                  <p className="text-text-secondary text-xs leading-relaxed">
+                    Your prompt does not seem to be valid. Please provide a
+                    prompt related to song creation, remixing, covers, or
+                    similar music tasks.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setInvalidPrompt(null);
+                    setIsProfileMenuOpen(false);
+                  }}
+                  className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors"
+                >
+                  Retry
+                </button>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(invalidPrompt);
+                  }}
+                  className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors"
+                >
+                  Copy prompt
+                </button>
+              </div>
+            </div>
+          )}
+
+          {insufficientCredit && (
+            <div className="bg-linear-to-br from-gray-800/50 to-gray-900/50 rounded-xl p-4 border border-yellow-500/30 relative">
+              <button
+                onClick={() => setInsufficientCredit(false)}
+                className="absolute top-3 right-3 p-1 hover:bg-white/10 rounded-full transition-colors"
+                aria-label="Close"
+              >
+                <X className="w-4 h-4 text-gray-400" />
+              </button>
+              <div className="flex gap-3 items-start mb-4">
+                <div className="w-10 h-10 bg-linear-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shrink-0">
+                  <span className="text-2xl">⚠️</span>
+                </div>
+                <div className="flex-1 min-w-0 pt-1">
+                  <h4 className="text-yellow-400 font-semibold text-base mb-1">
+                    Insufficient credits
+                  </h4>
+                  <p className="text-gray-300 text-sm">
+                    Your credit balance : 0
+                  </p>
+                </div>
+              </div>
+              <button className="w-full px-6 py-2.5 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors border border-white/20">
+                Top Up
+              </button>
+            </div>
+          )}
+
+          {failedGeneration && (
+            <div className="bg-linear-to-br from-gray-800/50 to-gray-900/50 rounded-xl p-4 border border-red-500/30 relative">
+              <button
+                onClick={() => setFailedGeneration(null)}
+                className="absolute top-3 right-3 p-1 hover:bg-white/10 rounded-full transition-colors"
+                aria-label="Close"
+              >
+                <X className="w-4 h-4 text-gray-400" />
+              </button>
+              <div className="flex gap-3 items-start mb-4">
+                <div className="w-10 h-10 bg-linear-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shrink-0">
+                  <span className="text-2xl">❌</span>
+                </div>
+                <div className="flex-1 min-w-0 pt-1">
+                  <h4 className="text-red-400 font-semibold text-base mb-1">
+                    Generation Failed
+                  </h4>
+                  <p className="text-gray-300 text-sm mb-2">
+                    {failedGeneration.error ||
+                      "An error occurred during generation"}
+                  </p>
+                  <p className="text-gray-400 text-xs line-clamp-1">
+                    Prompt: {failedGeneration.prompt}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setFailedGeneration(null);
+                    setIsProfileMenuOpen(false);
+                  }}
+                  className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors"
+                >
+                  Retry
+                </button>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(failedGeneration.prompt);
+                  }}
+                  className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/15 rounded-lg text-white text-sm font-medium transition-colors"
+                >
+                  Copy prompt
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="space-y-3">
             {generations.length === 0 ? (
               <div className="text-center py-8 text-text-secondary text-sm">
@@ -64,23 +242,65 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
               generations.map((generation) => (
                 <div
                   key={generation.id}
-                  className="flex gap-3 p-2 rounded-lg hover:bg-hover transition-colors"
+                  className={`flex gap-3 p-2 rounded-lg transition-colors ${
+                    generation.status === "completed" && generation.audioUrl
+                      ? "cursor-pointer hover:bg-hover"
+                      : "cursor-default"
+                  }`}
+                  onClick={() => {
+                    if (
+                      generation.status === "completed" &&
+                      generation.audioUrl
+                    ) {
+                      setCurrentGeneration(generation);
+                      setIsPlaying(true);
+                      onClose();
+                    }
+                  }}
                 >
-                  <div className="w-16 h-16 bg-gradient-to-b from-blue-300 to-blue-500 rounded-lg flex items-center justify-center shrink-0 relative overflow-hidden">
+                  <div className="w-16 h-16 bg-linear-to-b from-blue-300 to-blue-500 rounded-lg flex items-center justify-center shrink-0 relative overflow-hidden">
                     {generation.thumbnailUrl ? (
                       <Image
-                        src={generation.thumbnailUrl}
+                        src={getThumbnailUrl(generation.thumbnailUrl)}
                         alt={generation.prompt}
                         fill
-                        className="object-cover"
+                        className={`object-cover transition-all duration-700 ease-out ${
+                          generation.status === "generating" ||
+                          generation.status === "failed"
+                            ? "opacity-30 scale-105 blur-sm"
+                            : "opacity-100 scale-100 blur-0"
+                        }`}
                       />
                     ) : (
                       <Music className="w-8 h-8 text-white" />
                     )}
                     {generation.status === "generating" && (
-                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                        <div className="text-white text-xs font-medium">
-                          {generation.progress}%
+                      <div className="absolute inset-0 bg-black/50 overflow-hidden">
+                        <div
+                          className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-blue-400/80 via-cyan-400/80 to-green-400/80 transition-all duration-500 ease-out"
+                          style={{
+                            height: `${generation.progress}%`,
+                          }}
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="text-white text-xs font-semibold drop-shadow-lg z-10">
+                            {generation.progress}%
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {generation.status === "failed" && (
+                      <div className="absolute inset-0 bg-black/50 overflow-hidden">
+                        <div
+                          className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-red-500/80 via-red-500/60 to-red-400/40 transition-all duration-500 ease-out"
+                          style={{
+                            height: `${generation.progress}%`,
+                          }}
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="text-red-400 text-xs font-semibold drop-shadow-lg z-10">
+                            Failed
+                          </div>
                         </div>
                       </div>
                     )}
@@ -111,17 +331,18 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                     </div>
                   </div>
 
-                  {/* Actions */}
                   <div className="flex items-center gap-2 shrink-0">
                     {generation.status === "completed" && (
                       <>
                         <button
+                          onClick={(e) => e.stopPropagation()}
                           className="p-1.5 hover:bg-active rounded transition-colors"
                           aria-label="Like"
                         >
                           <ThumbsUp className="w-4 h-4 text-text-secondary fill-text-secondary" />
                         </button>
                         <button
+                          onClick={(e) => e.stopPropagation()}
                           className="p-1.5 hover:bg-active rounded transition-colors"
                           aria-label="Dislike"
                         >
@@ -133,12 +354,14 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                       generation.audioUrl && (
                         <>
                           <button
+                            onClick={(e) => e.stopPropagation()}
                             className="p-1.5 hover:bg-active rounded transition-colors"
                             aria-label="Download"
                           >
                             <Download className="w-4 h-4 text-text-secondary" />
                           </button>
                           <button
+                            onClick={(e) => e.stopPropagation()}
                             className="p-1.5 hover:bg-active rounded transition-colors"
                             aria-label="More options"
                           >
@@ -146,6 +369,11 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                           </button>
                         </>
                       )}
+                    {generation.status === "failed" && (
+                      <div className="text-red-400 text-xs font-medium px-2 py-1 bg-red-500/10 rounded">
+                        Failed
+                      </div>
+                    )}
                   </div>
                 </div>
               ))
