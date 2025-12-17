@@ -12,7 +12,10 @@ export function useSocket() {
   );
 
   useEffect(() => {
-    const socket = io("http://localhost:3000", {
+    const socketUrl =
+      process.env.NEXT_PUBLIC_SOCKET_URL || window.location.origin;
+
+    const socket = io(socketUrl, {
       path: "/socket.io",
       transports: ["websocket", "polling"],
     });

@@ -25,7 +25,7 @@ export function RecentGenerations() {
       </h2>
       <div className="space-y-3">
         <AnimatePresence mode="popLayout">
-          {generations.slice(0, 6).map((generation, index) => {
+          {generations.map((generation, index) => {
             const isGenerating = generation.status === "generating";
             const isFailed = generation.status === "failed";
             return (

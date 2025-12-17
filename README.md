@@ -45,6 +45,7 @@ A modern, full-stack music generation application built with Next.js, featuring 
 - **Custom Server**: Node.js with Next.js custom server
 - **WebSocket**: Socket.IO (Server & Client)
 - **Real-Time Communication**: Bidirectional event-based communication
+- **Hosting**: Railway (supports WebSockets & custom servers)
 
 ### Audio Processing
 
