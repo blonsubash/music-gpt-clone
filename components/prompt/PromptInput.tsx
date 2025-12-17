@@ -13,6 +13,7 @@ import {
   InstrumentalIcon,
 } from "@/app/assets/icons";
 import Image from "next/image";
+import { useTooltip } from "@/hooks/useTooltip";
 
 interface PromptInputProps {
   placeholder?: string;
@@ -25,6 +26,8 @@ export function PromptInput({
   value: controlledValue,
   onChange,
 }: PromptInputProps) {
+  const { tooltip } = useTooltip();
+
   const [internalValue, setInternalValue] = useState("");
   const [placeholder, setPlaceholder] = useState(
     externalPlaceholder ?? getRandomPlaceholder()
@@ -220,6 +223,22 @@ export function PromptInput({
   const showAnimation =
     !hasPlayedInitialAnimation || isSubmitting || isGenerating;
 
+  tooltip("#attach-file-button", {
+    content: "Attach file",
+    arrow: true,
+    animation: "fade",
+  });
+
+  tooltip("#instrumental-button", {
+    content: "Instrumental mode",
+    arrow: true,
+    animation: "fade",
+  });
+  tooltip("#control-button", {
+    content: "Control options",
+    arrow: true,
+    animation: "fade",
+  });
   return (
     <div
       className={`prompt-input-container rounded-4xl relative transition-all duration-300 ease-in-out ${
@@ -258,7 +277,10 @@ export function PromptInput({
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <div className="flex items-center gap-2 justify-between">
-            <button className="p-1 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer">
+            <button
+              className="p-1 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer"
+              id="attach-file-button"
+            >
               <Image
                 src={AttachFileIcon}
                 alt="Attach file"
@@ -266,18 +288,24 @@ export function PromptInput({
                 height={20}
               />
             </button>
-            <button className="p-1 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer">
+            <button
+              className="p-1 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer"
+              id="control-button"
+            >
               <Image
                 src={ControlIcon}
-                alt="Attach file"
+                alt="Control options"
                 width={20}
                 height={20}
               />
             </button>
-            <button className="p-1 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer">
+            <button
+              className="p-1 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer"
+              id="instrumental-button"
+            >
               <Image
                 src={InstrumentalIcon}
-                alt="Attach file"
+                alt="Instrumental mode"
                 width={20}
                 height={20}
               />
@@ -296,7 +324,7 @@ export function PromptInput({
             </button>
 
             <button
-              className="p-3 bg-hover rounded-full hover:bg-white/10  transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer border border-border"
+              className="p-2 bg-hover rounded-full hover:bg-white/10  transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer border border-border"
               aria-label="Submit"
               onClick={handleSubmit}
               disabled={!value.trim() || isSubmitting || !isConnected}

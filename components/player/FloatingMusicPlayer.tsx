@@ -127,12 +127,9 @@ export function FloatingMusicPlayer() {
       <div
         className={`fixed z-50 bg-card/95 backdrop-blur-lg border border-border shadow-2xl rounded-2xl overflow-hidden transition-all duration-300 ${
           layout === "horizontal"
-            ? "bottom-4 left-1/2 -translate-x-1/2  ml-30"
-            : "bottom-4 right-4"
+            ? "bottom-4 left-4 right-4 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-[600px] md:ml-30"
+            : "bottom-4 right-4 w-[280px]"
         }`}
-        style={{
-          width: layout === "vertical" ? "280px" : "600px",
-        }}
       >
         <div className="absolute top-3 right-3 z-10 flex items-center gap-2">
           <button

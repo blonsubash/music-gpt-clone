@@ -30,8 +30,8 @@ export function HorizontalPlayer({
   formatTime,
 }: PlayerControlsProps) {
   return (
-    <div className="flex flex-row items-center gap-4 p-4 w-full">
-      <div className="relative w-24 h-24 rounded-lg overflow-hidden bg-hover shrink-0">
+    <div className="flex flex-row items-center gap-3 md:gap-4 p-3 md:p-4 w-full">
+      <div className="relative w-16 h-16 md:w-24 md:h-24 rounded-lg overflow-hidden bg-hover shrink-0">
         {currentGeneration.thumbnailUrl ? (
           <Image
             src={getThumbnailUrl(currentGeneration.thumbnailUrl)}
@@ -41,17 +41,20 @@ export function HorizontalPlayer({
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Music className="w-10 h-10 text-text-tertiary" />
+            <Music className="w-8 h-8 md:w-10 md:h-10 text-text-tertiary" />
           </div>
         )}
       </div>
 
       <div className="flex-1 min-w-0">
-        <div className="mb-3">
-          <div className="text-sm font-semibold text-text-primary truncate mb-0.5">
+        {/* Title section */}
+        <div className="mb-2 md:mb-3">
+          <div className="text-xs md:text-sm font-semibold text-text-primary truncate mb-0.5">
             {currentGeneration.prompt}
           </div>
-          <div className="text-xs text-text-secondary">MusicGPT</div>
+          <div className="text-[10px] md:text-xs text-text-secondary">
+            MusicGPT
+          </div>
         </div>
 
         <div
@@ -66,61 +69,66 @@ export function HorizontalPlayer({
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-xs text-text-secondary min-w-fit">
+        <div className="flex items-center justify-between gap-2 md:gap-3">
+          <div className="flex items-center gap-1 md:gap-2 text-[10px] md:text-xs text-text-secondary min-w-fit">
             <span>{formatTime(currentTime)}</span>
             <span>/</span>
             <span>{formatTime(duration)}</span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 md:gap-2">
             <button
-              className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
+              className="p-1 md:p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
               aria-label="Previous"
             >
-              <SkipBack className="w-4 h-4" />
+              <SkipBack className="w-3.5 h-3.5 md:w-4 md:h-4" />
             </button>
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="p-2.5 bg-accent-orange text-white rounded-full hover:scale-105 transition-transform shadow-lg"
+              className="p-2 md:p-2.5 bg-accent-orange text-white rounded-full hover:scale-105 transition-transform shadow-lg"
               aria-label={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? (
-                <Pause className="w-5 h-5 fill-current" />
+                <Pause className="w-4 h-4 md:w-5 md:h-5 fill-current" />
               ) : (
-                <Play className="w-5 h-5 fill-current ml-0.5" />
+                <Play className="w-4 h-4 md:w-5 md:h-5 fill-current ml-0.5" />
               )}
             </button>
             <button
-              className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
+              className="p-1 md:p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
               aria-label="Next"
             >
-              <SkipForward className="w-4 h-4" />
+              <SkipForward className="w-3.5 h-3.5 md:w-4 md:h-4" />
             </button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 md:gap-2">
             <button
               onClick={() => setIsLiked(!isLiked)}
-              className={`p-1.5 hover:bg-hover rounded-full transition-colors ${
+              className={`p-1 md:p-1.5 hover:bg-hover rounded-full transition-colors ${
                 isLiked ? "text-accent-red" : "text-text-secondary"
               }`}
               aria-label="Like"
             >
-              <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
+              <Heart
+                className={`w-3.5 h-3.5 md:w-4 md:h-4 ${
+                  isLiked ? "fill-current" : ""
+                }`}
+              />
             </button>
 
             <button
               onClick={() => setVolume(volume === 0 ? 1 : 0)}
-              className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
+              className="p-1 md:p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
               aria-label={volume === 0 ? "Unmute" : "Mute"}
             >
               {volume === 0 ? (
-                <VolumeX className="w-4 h-4" />
+                <VolumeX className="w-3.5 h-3.5 md:w-4 md:h-4" />
               ) : (
-                <Volume2 className="w-4 h-4" />
+                <Volume2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
               )}
             </button>
+
             <input
               type="range"
               min="0"
@@ -128,11 +136,11 @@ export function HorizontalPlayer({
               step="0.01"
               value={volume}
               onChange={(e) => setVolume(parseFloat(e.target.value))}
-              className="w-16 h-1 bg-border rounded-lg appearance-none cursor-pointer accent-accent-orange hover:accent-orange-500 transition-colors"
+              className="hidden md:block w-16 h-1 bg-border rounded-lg appearance-none cursor-pointer accent-accent-orange hover:accent-orange-500 transition-colors"
             />
 
             <button
-              className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
+              className="hidden md:block p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
               aria-label="More options"
             >
               <MoreHorizontal className="w-4 h-4" />

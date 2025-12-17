@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@import "tippy.js/dist/tippy.css";
 /* 
  * Tailwind CSS v4 - CSS-First Configuration
  * All colors are defined here using @theme directive
@@ -165,7 +165,6 @@ textarea {
   }
 }
 
-/* Flowing border animation - simpler approach */
 .border-flow {
   position: relative;
   isolation: isolate;
