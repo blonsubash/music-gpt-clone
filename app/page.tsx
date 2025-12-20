@@ -31,7 +31,7 @@ export default function Home() {
         <Menu size={24} className="text-foreground" />
       </button>
 
-      <main className="flex flex-col items-center justify-center md:ml-50 bg-background min-h-screen p-8 pb-28 w-full ">
+      <main className="flex-1 items-center justify-center md:ml-50 bg-background min-h-screen p-8 pb-28 w-full mt-50 ">
         <Header />
         <PromptBox promptValue={promptValue} onPromptChange={setPromptValue} />
         <RecentGenerations />

@@ -1,21 +1,10 @@
 "use client";
 
-import {
-  Play,
-  ThumbsUp,
-  ThumbsDown,
-  Download,
-  MoreVertical,
-  Music,
-  Info,
-  ChevronRight,
-  Settings,
-  X,
-} from "lucide-react";
+import { Info, ChevronRight, Settings, X } from "lucide-react";
 import { useGenerationStore } from "@/lib/store";
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import { getThumbnailUrl } from "@/lib/imageUtils";
+import { AnimatePresence } from "framer-motion";
+import { GenerationItem } from "@/components/generation";
 
 interface ProfileMenuProps {
   isOpen: boolean;
@@ -24,10 +13,6 @@ interface ProfileMenuProps {
 
 export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const generations = useGenerationStore((state) => state.generations);
-  const setCurrentGeneration = useGenerationStore(
-    (state) => state.setCurrentGeneration
-  );
-  const setIsPlaying = useGenerationStore((state) => state.setIsPlaying);
   const invalidPrompt = useGenerationStore((state) => state.invalidPrompt);
   const setInvalidPrompt = useGenerationStore(
     (state) => state.setInvalidPrompt
@@ -278,144 +263,17 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                 No generations yet
               </div>
             ) : (
-              generations.map((generation) => (
-                <div
-                  key={generation.id}
-                  className={`flex gap-3 p-2 rounded-lg transition-colors ${
-                    generation.status === "completed" && generation.audioUrl
-                      ? "cursor-pointer hover:bg-hover"
-                      : "cursor-default"
-                  }`}
-                  onClick={() => {
-                    if (
-                      generation.status === "completed" &&
-                      generation.audioUrl
-                    ) {
-                      setCurrentGeneration(generation);
-                      setIsPlaying(true);
-                      onClose();
-                    }
-                  }}
-                >
-                  <div className="w-16 h-16 bg-linear-to-b from-blue-300 to-blue-500 rounded-lg flex items-center justify-center shrink-0 relative overflow-hidden">
-                    {generation.thumbnailUrl ? (
-                      <Image
-                        src={getThumbnailUrl(generation.thumbnailUrl)}
-                        alt={generation.prompt}
-                        fill
-                        className={`object-cover transition-all duration-700 ease-out ${
-                          generation.status === "generating" ||
-                          generation.status === "failed"
-                            ? "opacity-30 scale-105 blur-sm"
-                            : "opacity-100 scale-100 blur-0"
-                        }`}
-                      />
-                    ) : (
-                      <Music className="w-8 h-8 text-white" />
-                    )}
-                    {generation.status === "generating" && (
-                      <div className="absolute inset-0 bg-black/50 overflow-hidden">
-                        <div
-                          className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-blue-400/80 via-cyan-400/80 to-green-400/80 transition-all duration-500 ease-out"
-                          style={{
-                            height: `${generation.progress}%`,
-                          }}
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-white text-xs font-semibold drop-shadow-lg z-10">
-                            {generation.progress}%
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    {generation.status === "failed" && (
-                      <div className="absolute inset-0 bg-black/50 overflow-hidden">
-                        <div
-                          className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-red-500/80 via-red-500/60 to-red-400/40 transition-all duration-500 ease-out"
-                          style={{
-                            height: `${generation.progress}%`,
-                          }}
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-red-400 text-xs font-semibold drop-shadow-lg z-10">
-                            Failed
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    {generation.status === "completed" &&
-                      generation.audioUrl && (
-                        <Play className="w-6 h-6 text-white fill-white absolute" />
-                      )}
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-white font-medium text-sm truncate">
-                      {generation.prompt}
-                    </h4>
-                    <div className="mt-2 flex items-center gap-2">
-                      <div
-                        className={`text-xs px-2 py-1 rounded-full ${
-                          generation.status === "completed"
-                            ? "bg-green-500/10 text-green-500"
-                            : generation.status === "generating"
-                            ? "bg-blue-500/10 text-blue-500"
-                            : generation.status === "failed"
-                            ? "bg-red-500/10 text-red-500"
-                            : "bg-yellow-500/10 text-yellow-500"
-                        }`}
-                      >
-                        {generation.status}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 shrink-0">
-                    {generation.status === "completed" && (
-                      <>
-                        <button
-                          onClick={(e) => e.stopPropagation()}
-                          className="p-1.5 hover:bg-active rounded transition-colors cursor-pointer"
-                          aria-label="Like"
-                        >
-                          <ThumbsUp className="w-4 h-4 text-text-secondary fill-text-secondary" />
-                        </button>
-                        <button
-                          onClick={(e) => e.stopPropagation()}
-                          className="p-1.5 hover:bg-active rounded transition-colors cursor-pointer"
-                          aria-label="Dislike"
-                        >
-                          <ThumbsDown className="w-4 h-4 text-text-secondary" />
-                        </button>
-                      </>
-                    )}
-                    {generation.status === "completed" &&
-                      generation.audioUrl && (
-                        <>
-                          <button
-                            onClick={(e) => e.stopPropagation()}
-                            className="p-1.5 hover:bg-active rounded transition-colors cursor-pointer"
-                            aria-label="Download"
-                          >
-                            <Download className="w-4 h-4 text-text-secondary" />
-                          </button>
-                          <button
-                            onClick={(e) => e.stopPropagation()}
-                            className="p-1.5 hover:bg-active rounded transition-colors cursor-pointer"
-                            aria-label="More options"
-                          >
-                            <MoreVertical className="w-4 h-4 text-text-secondary" />
-                          </button>
-                        </>
-                      )}
-                    {generation.status === "failed" && (
-                      <div className="text-red-400 text-xs font-medium px-2 py-1 bg-red-500/10 rounded">
-                        Failed
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))
+              <AnimatePresence mode="popLayout">
+                {generations.map((generation, index) => (
+                  <GenerationItem
+                    key={generation.id}
+                    generation={generation}
+                    index={index}
+                    variant="compact"
+                    onClose={onClose}
+                  />
+                ))}
+              </AnimatePresence>
             )}
           </div>
         </div>

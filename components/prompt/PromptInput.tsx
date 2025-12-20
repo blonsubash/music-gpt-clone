@@ -228,8 +228,8 @@ export function PromptInput({
         showAnimation ? "generating" : ""
       }`}
     >
-      <div className="bg-card rounded-4xl p-6 flex flex-col gap-4 relative z-[1]">
-        <div className="relative transition-all duration-300 ease-in-out">
+      <div className="bg-prompt-input-background rounded-4xl p-6 flex flex-col gap-4 relative z-[1]">
+        <div className="relative transition-all duration-300 ease-in-out ">
           <textarea
             ref={textareaRef}
             rows={1}
@@ -258,48 +258,48 @@ export function PromptInput({
             </div>
           )}
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center   ">
           <div className="flex items-center gap-2 justify-between">
             <button
-              className="p-1 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer"
+              className="p-2.5 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer"
               id="attach-file-button"
             >
               <Image
                 src={AttachFileIcon}
                 alt="Attach file"
-                width={20}
-                height={20}
+                width={18}
+                height={18}
               />
             </button>
             <button
-              className="p-1 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer"
+              className="p-2.5 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer"
               id="control-button"
             >
               <Image
                 src={ControlIcon}
                 alt="Control options"
-                width={20}
-                height={20}
+                width={18}
+                height={18}
               />
             </button>
             <button
-              className="p-1 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer"
+              className="p-2.5 hover:bg-white/10 rounded-full transition-colors relative group border border-border cursor-pointer"
               id="instrumental-button"
             >
               <Image
                 src={InstrumentalIcon}
                 alt="Instrumental mode"
-                width={20}
-                height={20}
+                width={18}
+                height={18}
               />
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-hover rounded-full hover:bg-white/10  border border-border transition-colors cursor-pointer">
+            <button className="flex items-center gap-2 p-2.5 bg-prompt-input-background rounded-full hover:bg-white/10  border border-border transition-colors cursor-pointer">
               <span className="text-sm text-text-tertiary">+ Lyrics</span>
             </button>
           </div>
 
           <div className="flex items-center gap-2 ml-auto  ">
-            <button className="border-flow flex items-center gap-2 px-4 py-2 bg-hover rounded-full hover:bg-white/10 transition-colors cursor-pointer relative ">
+            <button className="border-flow flex items-center gap-2 p-2.5 bg-prompt-input-background rounded-full hover:bg-white/10 transition-colors cursor-pointer relative ">
               <span className="text-sm text-text-tertiary relative z-10">
                 Tools
               </span>
@@ -307,7 +307,7 @@ export function PromptInput({
             </button>
 
             <button
-              className="p-2 bg-hover rounded-full hover:bg-white/10  transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer border border-border"
+              className="p-2.5 bg-hover rounded-full hover:bg-white/10  transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-border cursor-pointer border border-border"
               aria-label="Submit"
               onClick={handleSubmit}
               disabled={!value.trim() || isSubmitting || !isConnected}

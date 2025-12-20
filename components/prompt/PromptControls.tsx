@@ -11,7 +11,7 @@ export function PromptControls() {
     <div className="flex items-center justify-between mt-4 px-2">
       <div className="flex items-center gap-4">
         <button
-          className="p-2 hover:bg-hover rounded-lg transition-colors"
+          className="p-2 hover:bg-hover rounded-lg transition-colors "
           aria-label="Attach file"
         >
           <Paperclip className="w-5 h-5 text-text-secondary" />

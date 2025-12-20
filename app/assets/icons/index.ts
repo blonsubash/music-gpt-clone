@@ -10,7 +10,8 @@ import StarsIcon from "./stars.svg";
 import UserIcon from "./user.svg";
 import CompassIcon from "./compass.svg";
 import FlagIcon from "./flag.svg";
-
+import ThumbsUpIcon from "./thumbs-up.svg";
+import ThumbsDownIcon from "./thumbs-down.svg";
 export {
   AttachFileIcon,
   ControlIcon,
@@ -24,4 +25,6 @@ export {
   UserIcon,
   CompassIcon,
   FlagIcon,
+  ThumbsUpIcon,
+  ThumbsDownIcon,
 };

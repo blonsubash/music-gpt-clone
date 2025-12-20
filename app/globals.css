@@ -43,6 +43,12 @@
   /* Profile Menu Text Colors */
   --color-profile-menu-text: #e4e6e8;
   --color-profile-menu-text-secondary: #898c92;
+
+  /*  Border Colors */
+  --color-border-100: #5d6165;
+
+  /* Prompt Input Colors */
+  --color-prompt-input-background: #1d2125;
 }
 
 body {
@@ -205,5 +211,32 @@ textarea {
   }
   100% {
     background-position: -200% 0;
+  }
+}
+
+.text-glow-flow {
+  color: white;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.7) 25%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.7) 75%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGlowFlow 2.5s linear infinite;
+  will-change: background-position;
+}
+
+@keyframes textGlowFlow {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
   }
 }
