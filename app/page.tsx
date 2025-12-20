@@ -15,7 +15,7 @@ export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex bg-background text-foreground">
+    <div className="min-h-screen flex bg-background">
       <Sidebar
         activeNav={activeNav}
         onNavChange={handleNavChange}
@@ -31,7 +31,7 @@ export default function Home() {
         <Menu size={24} className="text-foreground" />
       </button>
 
-      <main className="flex-1 items-center justify-center md:ml-64 bg-background min-h-screen p-8 pb-28">
+      <main className="flex flex-col items-center justify-center md:ml-50 bg-background min-h-screen p-8 pb-28 w-full ">
         <Header />
         <PromptBox promptValue={promptValue} onPromptChange={setPromptValue} />
         <RecentGenerations />

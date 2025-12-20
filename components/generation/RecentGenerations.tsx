@@ -19,7 +19,7 @@ export function RecentGenerations() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto mt-8">
+    <div className="w-full max-w-4xl mx-auto mt-8 ">
       <h2 className="text-2xl font-semibold text-white mb-4">
         Recent generations
       </h2>

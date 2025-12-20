@@ -81,21 +81,54 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
       />
 
       <div
-        className={`absolute right-0 top-13 z-50 w-96 bg-card rounded-2xl border border-border shadow-xl overflow-hidden transition-all duration-300 ease-out origin-top-right ${
+        className={`absolute right-0 top-13 z-50 w-96 rounded-[1.25rem] overflow-hidden transition-all duration-300 ease-out origin-top-right ${
           isAnimating
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 scale-95 -translate-y-2"
         }`}
+        style={{
+          background: "#16191C",
+          border: "1px solid #1D2125",
+          boxShadow: "0px 0px 24px 0px rgba(0, 0, 0, 0.478)",
+        }}
       >
-        <div className="p-6 space-y-4 max-h-[600px] overflow-y-auto custom-scrollbar">
+        <div className="p-6 space-y-4 max-h-150 w-100 max-w-100 overflow-y-auto custom-scrollbar">
           <div className="pb-4 border-b border-border space-y-4">
             <div className="flex gap-4 items-center">
-              <div className="w-14 h-14 bg-linear-to-br from-gray-700 to-gray-800 rounded-full flex items-center justify-center shrink-0 border-2 border-gray-600">
-                <span className="text-2xl font-medium text-white">S</span>
+              <div
+                className="relative w-15 h-15 rounded-full flex items-center justify-center shrink-0"
+                style={{
+                  background:
+                    "linear-gradient(312.58deg, rgba(200, 0, 255, 0.05) 17.25%, rgba(255, 44, 155, 0.05) 37.17%, rgba(255, 123, 0, 0.05) 62.95%, rgba(255, 133, 4, 0.05) 75.03%, rgba(255, 211, 99, 0.05) 82.54%)",
+                  border: "2px solid transparent",
+                  backgroundClip: "padding-box",
+                  position: "relative",
+                }}
+              >
+                <div
+                  className="absolute inset-0 rounded-full pointer-events-none"
+                  style={{
+                    background:
+                      "linear-gradient(314.53deg, #C800FF 17.23%, #FF2C9B 38.51%, #FF7B00 66.07%, #FF8504 78.98%, #FFD363 87%)",
+                    mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    maskComposite: "exclude",
+                    WebkitMask:
+                      "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    WebkitMaskComposite: "xor",
+                    padding: "2px",
+                  }}
+                />
+                <span className="text-xl font-normal text-white relative z-10">
+                  J
+                </span>
               </div>
               <div className="flex-1 min-w-0  ">
-                <h3 className="text-white font-semibold text-md">Subash</h3>
-                <p className="text-text-secondary text-xs">@subashlama100</p>
+                <h3 className="text-profile-menu-text font-medium text-base">
+                  Johnny
+                </h3>
+                <p className="text-profile-menu-text-secondary text-sm">
+                  @johnny
+                </p>
               </div>
               <button
                 className="p-2 hover:bg-hover rounded-lg transition-colors cursor-pointer"
@@ -108,7 +141,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
             <div className="flex items-center justify-between p-4 bg-hover/50 rounded-lg">
               <div className="flex items-center gap-2">
                 <span className="text-white font-medium">
-                  300 / 500 credits
+                  120 / 500 credits
                 </span>
                 <button
                   className="p-0.5 hover:bg-hover rounded transition-colors cursor-pointer"
@@ -118,7 +151,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                 </button>
               </div>
               <button className="flex items-center gap-1 text-text-secondary hover:text-white transition-colors">
-                <span className="text-sm font-medium">Upgrade</span>
+                <span className="text-sm font-medium">Top Up</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>

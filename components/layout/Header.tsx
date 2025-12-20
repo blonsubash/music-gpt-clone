@@ -38,26 +38,42 @@ export function Header() {
   }, [isProfileMenuOpen]);
 
   return (
-    <div className="flex justify-end items-center gap-4 mb-8 relative">
-      <button className="px-4 py-2 text-sm hover:text-text-tertiary transition-colors text-foreground cursor-pointer">
-        Sign in
-      </button>
-      <button className="px-4 py-2 text-sm bg-background-dark rounded-lg hover:bg-active transition-colors text-foreground cursor-pointer">
-        Get MusicGPT Free
-      </button>
-
+    <div className="absolute top-4 right-4 gap-4 ">
       <button
         ref={profileButtonRef}
         onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-        className="relative p-0 w-12 h-12 rounded-full border-2 border-transparent bg-gradient-to-br from-accent-purple to-accent-orange hover:opacity-90 transition-opacity flex items-center justify-center cursor-pointer"
+        className="relative p-0 w-12 h-12 rounded-full hover:opacity-90 transition-opacity flex items-center justify-center cursor-pointer"
+        style={{
+          background:
+            "linear-gradient(312.58deg, rgba(200, 0, 255, 0.05) 17.25%, rgba(255, 44, 155, 0.05) 37.17%, rgba(255, 123, 0, 0.05) 62.95%, rgba(255, 133, 4, 0.05) 75.03%, rgba(255, 211, 99, 0.05) 82.54%)",
+          border: "2px solid transparent",
+          backgroundClip: "padding-box",
+          position: "relative",
+          cursor: "pointer",
+        }}
         aria-label="Profile menu"
       >
-        <div className="w-10 h-10 rounded-full bg-background-dark flex items-center justify-center text-white font-semibold text-sm">
-          S
+        <div
+          className="absolute inset-0 rounded-full pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(314.53deg, #C800FF 17.23%, #FF2C9B 38.51%, #FF7B00 66.07%, #FF8504 78.98%, #FFD363 87%)",
+            mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            maskComposite: "exclude",
+            WebkitMask:
+              "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            WebkitMaskComposite: "xor",
+            padding: "2px",
+            cursor: "pointer",
+          }}
+        />
+
+        <div className=" rounded-full  flex items-center justify-center text-white font-normal text-xl relative z-10">
+          J
         </div>
         {generationCount > 0 && (
-          <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center border-2 border-background">
-            <span className="text-white text-xs font-semibold">
+          <div className="absolute -top-1 -right-1 w-5 h-5 bg-notification-badge rounded-full flex items-center justify-center border-2 border-background z-20">
+            <span className="text-black text-[0.625rem] font-semibold">
               {generationCount}
             </span>
           </div>

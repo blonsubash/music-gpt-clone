@@ -23,7 +23,7 @@
   --color-active: #2e2f30;
 
   /* Border Colors */
-  --color-border: #ffffff30;
+  --color-border: #303438;
 
   /* Text Colors - creates text-text-* and bg-text-* utilities */
   --color-text-primary: #ffffff;
@@ -36,6 +36,13 @@
   --color-accent-orange: #ea580c;
   --color-accent-yellow: #eab308;
   --color-accent-red: #dc2626;
+
+  /* Notification Badge */
+  --color-notification-badge: #6bffac;
+
+  /* Profile Menu Text Colors */
+  --color-profile-menu-text: #e4e6e8;
+  --color-profile-menu-text-secondary: #898c92;
 }
 
 body {
