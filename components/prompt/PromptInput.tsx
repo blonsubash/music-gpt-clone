@@ -203,23 +203,38 @@ export function PromptInput({
     !hasPlayedInitialAnimation || isSubmitting || isGenerating;
 
   useEffect(() => {
-    tooltip("#attach-file-button", {
+    const attachTooltip = tooltip("#attach-file-button", {
       content: "Attach file",
       arrow: true,
       animation: "fade",
+      placement: "left",
     });
 
-    tooltip("#instrumental-button", {
+    const instrumentalTooltip = tooltip("#instrumental-button", {
       content: "Instrumental mode",
       arrow: true,
       animation: "fade",
+      placement: "bottom",
     });
 
-    tooltip("#control-button", {
+    const controlTooltip = tooltip("#control-button", {
       content: "Control options",
       arrow: true,
       animation: "fade",
+      placement: "bottom",
     });
+
+    return () => {
+      if (Array.isArray(attachTooltip)) {
+        attachTooltip.forEach((t) => t.destroy());
+      }
+      if (Array.isArray(instrumentalTooltip)) {
+        instrumentalTooltip.forEach((t) => t.destroy());
+      }
+      if (Array.isArray(controlTooltip)) {
+        controlTooltip.forEach((t) => t.destroy());
+      }
+    };
   }, [tooltip]);
 
   return (
@@ -228,7 +243,7 @@ export function PromptInput({
         showAnimation ? "generating" : ""
       }`}
     >
-      <div className="bg-prompt-input-background rounded-4xl p-6 flex flex-col gap-4 relative z-[1]">
+      <div className="bg-prompt-input-background rounded-4xl p-6 flex flex-col gap-4 relative z-1">
         <div className="relative transition-all duration-300 ease-in-out ">
           <textarea
             ref={textareaRef}
@@ -238,7 +253,7 @@ export function PromptInput({
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             disabled={isSubmitting || !isConnected}
-            className="flex-1 bg-transparent text-foreground placeholder-text-muted text-lg focus:outline-none w-full resize-none max-h-[140px] overflow-y-auto transition-all duration-300 ease-in-out disabled:opacity-50"
+            className="flex-1 bg-transparent text-foreground placeholder-text-muted text-lg focus:outline-none w-full resize-none max-h-35 overflow-y-auto transition-all duration-300 ease-in-out disabled:opacity-50"
           />
           {!value && (
             <div className="absolute top-0 left-0 pointer-events-none text-lg text-text-muted whitespace-nowrap overflow-hidden">
