@@ -11,6 +11,8 @@ import {
   Heart,
   MoreHorizontal,
   Music,
+  Shuffle,
+  Repeat,
 } from "lucide-react";
 import { PlayerControlsProps } from "./PlayerProps";
 import { getThumbnailUrl } from "@/lib/imageUtils";
@@ -31,7 +33,7 @@ export function VerticalPlayer({
 }: PlayerControlsProps) {
   return (
     <div className="flex flex-col">
-      <div className="relative w-full h-32 bg-hover">
+      <div className="relative w-full h-32 bg-hover rounded-2xl overflow-hidden">
         {currentGeneration.thumbnailUrl ? (
           <Image
             src={getThumbnailUrl(currentGeneration.thumbnailUrl)}
@@ -53,7 +55,7 @@ export function VerticalPlayer({
           <div className="text-xs font-semibold text-text-primary truncate mb-0.5">
             {currentGeneration.prompt}
           </div>
-          <div className="text-xs text-text-secondary">MusicGPT</div>
+          <div className="text-xs text-text-secondary">@jhonny</div>
         </div>
 
         <div
@@ -61,10 +63,10 @@ export function VerticalPlayer({
           onClick={handleProgressClick}
         >
           <div
-            className="h-full bg-accent-orange rounded-full transition-all duration-100 group-hover:bg-orange-500 relative"
+            className="h-full bg-white rounded-full transition-all duration-100 relative"
             style={{ width: `${progressPercentage}%` }}
           >
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2.5 h-2.5 bg-accent-orange rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md" />
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2.5 h-2.5 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
         </div>
 
@@ -75,14 +77,20 @@ export function VerticalPlayer({
 
         <div className="flex items-center justify-center gap-2 mb-3">
           <button
-            className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
+            className="p-1.5 hover:bg-white/10 rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
+            aria-label="Shuffle"
+          >
+            <Shuffle className="w-4 h-4" />
+          </button>
+          <button
+            className="p-1.5 hover:bg-white/10 rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
             aria-label="Previous"
           >
             <SkipBack className="w-4 h-4" />
           </button>
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="p-3 bg-accent-orange text-white rounded-full hover:scale-105 transition-transform shadow-lg"
+            className="p-3 bg-white text-black rounded-full hover:scale-105 transition-transform shadow-lg"
             aria-label={isPlaying ? "Pause" : "Play"}
           >
             {isPlaying ? (
@@ -92,17 +100,23 @@ export function VerticalPlayer({
             )}
           </button>
           <button
-            className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
+            className="p-1.5 hover:bg-white/10 rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
             aria-label="Next"
           >
             <SkipForward className="w-4 h-4" />
+          </button>
+          <button
+            className="p-1.5 hover:bg-white/10 rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
+            aria-label="Repeat"
+          >
+            <Repeat className="w-4 h-4" />
           </button>
         </div>
 
         <div className="flex items-center justify-between">
           <button
             onClick={() => setIsLiked(!isLiked)}
-            className={`p-1.5 hover:bg-hover rounded-full transition-colors ${
+            className={`p-1.5 hover:bg-white/10 rounded-full transition-colors ${
               isLiked ? "text-accent-red" : "text-text-secondary"
             } cursor-pointer`}
             aria-label="Like"
@@ -113,7 +127,7 @@ export function VerticalPlayer({
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => setVolume(volume === 0 ? 1 : 0)}
-              className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
+              className="p-1.5 hover:bg-white/10 rounded-full transition-colors text-text-secondary hover:text-text-primary cursor-pointer"
               aria-label={volume === 0 ? "Unmute" : "Mute"}
             >
               {volume === 0 ? (
@@ -129,12 +143,12 @@ export function VerticalPlayer({
               step="0.01"
               value={volume}
               onChange={(e) => setVolume(parseFloat(e.target.value))}
-              className="w-16 h-1 bg-border rounded-lg appearance-none cursor-pointer accent-accent-orange hover:accent-orange-500 transition-colors"
+              className="w-16 h-1 bg-border rounded-lg appearance-none cursor-pointer accent-white transition-colors"
             />
           </div>
 
           <button
-            className="p-1.5 hover:bg-hover rounded-full transition-colors text-text-secondary hover:text-text-primary"
+            className="p-1.5 hover:bg-white/10 rounded-full transition-colors text-text-secondary hover:text-text-primary"
             aria-label="More options"
           >
             <MoreHorizontal className="w-4 h-4 cursor-pointer" />
