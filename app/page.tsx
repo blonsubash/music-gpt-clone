@@ -10,7 +10,7 @@ import { RecentGenerations } from "@/components/generation";
 import { FloatingMusicPlayer } from "@/components/player";
 
 export default function Home() {
-  const { activeNav, handleNavChange } = useActiveNavigation("home");
+  const { activeNav, handleNavChange } = useActiveNavigation("create");
   const [promptValue, setPromptValue] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

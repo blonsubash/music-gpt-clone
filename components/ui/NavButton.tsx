@@ -1,8 +1,9 @@
-import { LucideIcon } from "lucide-react";
+import { StaticImageData } from "next/image";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface NavButtonProps {
-  icon: LucideIcon;
+  icon: StaticImageData;
   label: string;
   isActive?: boolean;
   onClick?: () => void;
@@ -10,7 +11,7 @@ interface NavButtonProps {
 }
 
 export function NavButton({
-  icon: Icon,
+  icon,
   label,
   isActive = false,
   onClick,
@@ -20,15 +21,15 @@ export function NavButton({
     <button
       onClick={onClick}
       className={cn(
-        "w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors cursor-pointer",
+        " flex items-center gap-2 px-4 py-1 rounded-[1.875rem] transition-colors cursor-pointer  w-fit h-9.25 ",
         isActive
-          ? "bg-active text-foreground"
-          : "text-text-secondary hover:bg-hover hover:text-foreground",
+          ? "bg-active text-white/10"
+          : "text-text-secondary hover:bg-hover hover:text-white/10",
         className
       )}
     >
-      <Icon className="w-5 h-5" />
-      <span>{label}</span>
+      <Image src={icon} alt={label} height={16} width={16} />
+      <span className="text-sm font-medium text-white">{label}</span>
     </button>
   );
 }

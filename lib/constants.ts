@@ -1,16 +1,12 @@
+import { Music, Radio, MessageSquare, FileEdit, Dice1 } from "lucide-react";
 import {
-  Home as HomeIcon,
-  Sparkles,
-  Globe,
-  User,
-  Heart,
-  Plus,
-  Music,
-  Radio,
-  MessageSquare,
-  FileEdit,
-  Dice1,
-} from "lucide-react";
+  HomeIcon,
+  StarsIcon,
+  CompassIcon,
+  UserIcon,
+  LikeIcon,
+  PlusIcon,
+} from "@/app/assets/icons";
 import { NavigationItem, LibraryItem, FooterLink, ActionButton } from "./types";
 
 export const NAVIGATION_ITEMS: NavigationItem[] = [
@@ -22,12 +18,12 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   {
     id: "create",
     label: "Create",
-    icon: Sparkles,
+    icon: StarsIcon,
   },
   {
     id: "explore",
     label: "Explore",
-    icon: Globe,
+    icon: CompassIcon,
   },
 ];
 
@@ -35,17 +31,17 @@ export const LIBRARY_ITEMS: LibraryItem[] = [
   {
     id: "profile",
     label: "Profile",
-    icon: User,
+    icon: UserIcon,
   },
   {
     id: "liked",
     label: "Liked",
-    icon: Heart,
+    icon: LikeIcon,
   },
   {
     id: "new-playlist",
-    label: "New Playlist",
-    icon: Plus,
+    label: "New playlist",
+    icon: PlusIcon,
   },
 ];
 
@@ -92,5 +88,4 @@ export const ACTION_BUTTONS: ActionButton[] = [
 ];
 
 export const PROMO_MESSAGE =
-  "Model v6 Pro is here! Pushing boundaries to the world's best AI music model";
-
+  "Pushing boundaries to the world's best AI music model";

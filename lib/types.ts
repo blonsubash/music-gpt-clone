@@ -1,16 +1,17 @@
 import { LucideIcon } from "lucide-react";
+import { StaticImageData } from "next/image";
 
 export type NavigationItem = {
   id: string;
   label: string;
-  icon: LucideIcon;
+  icon: StaticImageData;
   href?: string;
 };
 
 export type LibraryItem = {
   id: string;
   label: string;
-  icon: LucideIcon;
+  icon: StaticImageData;
   href?: string;
 };
 
@@ -27,4 +28,3 @@ export type ActionButton = {
   variant?: "primary" | "secondary";
   iconColor?: string;
 };
-

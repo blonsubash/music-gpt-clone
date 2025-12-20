@@ -32,7 +32,7 @@ export function Sidebar({
 
       <aside
         className={`
-          w-64 bg-sidebar fixed h-screen z-50 transition-transform duration-300 ease-in-out
+          w-50 bg-sidebar fixed h-screen z-50 transition-transform duration-300 ease-in-out 
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0
         `}
@@ -49,8 +49,10 @@ export function Sidebar({
         <SidebarSearch />
         <SidebarNavigation activeNav={activeNav} onNavChange={onNavChange} />
         <SidebarLibrary />
-        <SidebarPromo />
-        <SidebarFooter />
+        <div className=" absolute bottom-0 left-0 right-0">
+          <SidebarPromo />
+          <SidebarFooter />
+        </div>
       </aside>
     </>
   );

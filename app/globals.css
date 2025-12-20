@@ -7,21 +7,20 @@
  */
 @theme {
   /* Fonts */
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
 
   /* Main Background Colors */
-  --color-background: #1a1a1a;
+  --color-background: #0c0e0f;
   --color-background-dark: #0a0a0a;
   --color-foreground: #ffffff;
 
   /* Sidebar & Card Colors */
-  --color-sidebar: #252525;
+  --color-sidebar: #151718;
   --color-card: #252525;
 
   /* Interactive States */
   --color-hover: #2a2a2a;
-  --color-active: #333;
+  --color-active: #2e2f30;
 
   /* Border Colors */
   --color-border: #ffffff30;
@@ -42,7 +41,7 @@
 body {
   background: var(--color-background);
   color: var(--color-foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
 }

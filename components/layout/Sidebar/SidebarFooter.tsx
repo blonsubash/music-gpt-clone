@@ -1,14 +1,12 @@
-import { Languages } from "lucide-react";
+import { FlagIcon } from "@/app/assets/icons";
 import { FOOTER_LINKS } from "@/lib/constants";
+import { ChevronDownIcon } from "lucide-react";
+import Image from "next/image";
 
 export function SidebarFooter() {
   return (
     <div className="p-4 ">
-      <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:bg-hover hover:text-foreground transition-colors mb-4 cursor-pointer">
-        <Languages className="w-5 h-5" />
-        <span>Language</span>
-      </button>
-      <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-text-muted">
+      <div className="flex flex-wrap gap-x-2 gap-y-2 text-xs text-text-muted">
         {FOOTER_LINKS.map((link) => (
           <a
             key={link.id}
@@ -18,6 +16,12 @@ export function SidebarFooter() {
             {link.label}
           </a>
         ))}
+        <div className="flex items-center gap-1 cursor-pointer">
+          <Image src={FlagIcon} alt="Flag" width={16} height={16} />
+          <span> EN</span>
+
+          <ChevronDownIcon className="w-4 h-4" />
+        </div>
       </div>
     </div>
   );

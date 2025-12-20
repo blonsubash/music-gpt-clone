@@ -1,13 +1,12 @@
-import { Music } from "lucide-react";
+import { MainLogoIcon } from "@/app/assets/icons";
+import Image from "next/image";
 
 export function SidebarLogo() {
   return (
     <div className="p-6 ">
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-linear-to-br from-accent-purple to-accent-orange flex items-center justify-center">
-          <Music size={20} color="white" />
-        </div>
-        <span className="text-xl font-semibold text-foreground">MusicGPT</span>
+        <Image src={MainLogoIcon} alt="MusicGPT Logo" width={28} height={28} />
+        <span className="text-base font-medium text-white">MusicGPT</span>
       </div>
     </div>
   );
