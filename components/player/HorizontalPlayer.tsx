@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState, useRef } from "react";
 import {
   Play,
   Pause,
@@ -17,19 +18,40 @@ import { getThumbnailUrl } from "@/lib/imageUtils";
 export function HorizontalPlayer({
   currentGeneration,
   isPlaying,
-
+  duration,
   isLiked,
   progressPercentage,
   setIsPlaying,
 
   setIsLiked,
   handleProgressClick,
+  formatTime,
 }: PlayerControlsProps) {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState(0);
+  const [hoverTime, setHoverTime] = useState(0);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!progressBarRef.current) return;
+
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(100, (offsetX / rect.width) * 100));
+    const time = (percentage / 100) * duration;
+
+    setTooltipPosition(offsetX);
+    setHoverTime(time);
+  };
   return (
     <div className="w-full rounded-2xl overflow-visible">
       <div
+        ref={progressBarRef}
         className="progress-bar h-0.5 cursor-pointer group relative w-2xl ml-3"
         onClick={handleProgressClick}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
       >
         <div
           className="h-full bg-linear-to-r from-prompt-input-background via-gray-400 to-white transition-all duration-100 relative shadow-[0_0_4px_rgba(255,255,255,0.3),0_0_8px_rgba(255,255,255,0.2)]"
@@ -38,6 +60,22 @@ export function HorizontalPlayer({
           <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-white/40 blur-[2px]" />
           <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2.5 h-2.5 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_0_12px_rgba(255,255,255,0.9),0_0_24px_rgba(255,255,255,0.5),0_0_36px_rgba(255,255,255,0.3)]" />
         </div>
+
+        {showTooltip && (
+          <div
+            className="absolute -top-10 bg-white text-black text-xs px-3 py-1.5 rounded-lg pointer-events-none z-10 shadow-lg whitespace-nowrap"
+            style={{
+              left: `${tooltipPosition}px`,
+              transform: "translateX(-50%)",
+            }}
+          >
+            <div className="font-medium">
+              {formatTime(hoverTime)} / {formatTime(duration)}
+            </div>
+
+            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white rotate-45" />
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-4 p-4 justify-between">

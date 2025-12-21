@@ -57,7 +57,7 @@ export function MobileHorizontalPlayer({
               step="0.01"
               value={volume}
               onChange={(e) => setVolume(parseFloat(e.target.value))}
-              className="w-16 h-1 bg-purple-950/30 rounded-lg appearance-none cursor-pointer accent-white transition-colors"
+              className="w-16 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-white transition-colors [&::-webkit-slider-thumb]:bg-white [&::-moz-range-thumb]:bg-white"
             />
             <button
               onClick={() => setVolume(volume === 0 ? 1 : 0)}
@@ -109,12 +109,12 @@ export function MobileHorizontalPlayer({
         className="progress-bar h-1 cursor-pointer group relative"
         onClick={handleProgressClick}
       >
-        <div className="h-full bg-purple-950/30" />
+        <div className="h-full bg-white/20" />
         <div
-          className="absolute top-0 left-0 h-full bg-gradient-to-r from-purple-400 via-purple-300 to-white transition-all duration-100 shadow-[0_0_8px_rgba(255,255,255,0.5)]"
+          className="absolute top-0 left-0 h-full bg-white transition-all duration-100 shadow-[0_0_8px_rgba(255,255,255,0.5)]"
           style={{ width: `${progressPercentage}%` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-white/50 blur-[1px]" />
+          <div className="absolute inset-0 bg-white/50 blur-[1px]" />
           <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2 h-2 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_0_8px_rgba(255,255,255,0.9)]" />
         </div>
       </div>
