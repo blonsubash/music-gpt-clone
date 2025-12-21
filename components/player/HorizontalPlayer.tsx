@@ -41,7 +41,7 @@ export function HorizontalPlayer({
       </div>
 
       <div className="flex items-center gap-4 p-4 justify-between">
-        <div className="flex items-center gap-4 ">
+        <div className="flex items-center gap-4 min-w-0 max-w-50 flex-1">
           <div className="relative w-16 h-16 rounded-2xl overflow-hidden bg-hover shrink-0">
             {currentGeneration.thumbnailUrl ? (
               <Image

@@ -15,6 +15,7 @@ import {
 import Image from "next/image";
 import { useTooltip } from "@/hooks/useTooltip";
 import { useGenerateMusicAPI } from "@/hooks/useGenerateMusicAPI";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface PromptInputProps {
   placeholder?: string;
@@ -28,7 +29,7 @@ export function PromptInput({
   onChange,
 }: PromptInputProps) {
   const { tooltip } = useTooltip();
-
+  const isMobile = useIsMobile();
   const [internalValue, setInternalValue] = useState("");
   const [placeholder, setPlaceholder] = useState(
     externalPlaceholder ?? getRandomPlaceholder()
@@ -308,9 +309,11 @@ export function PromptInput({
                 height={18}
               />
             </button>
-            <button className="flex items-center gap-2 p-2.5 bg-prompt-input-background rounded-full hover:bg-white/10  border border-border transition-colors cursor-pointer">
-              <span className="text-sm text-text-tertiary">+ Lyrics</span>
-            </button>
+            {!isMobile && (
+              <button className="flex items-center gap-2 p-2.5 bg-prompt-input-background rounded-full hover:bg-white/10  border border-border transition-colors cursor-pointer">
+                <span className="text-sm text-text-tertiary">+ Lyrics</span>
+              </button>
+            )}
           </div>
 
           <div className="flex items-center gap-2 ml-auto  ">
