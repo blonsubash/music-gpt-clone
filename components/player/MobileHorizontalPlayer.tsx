@@ -18,9 +18,7 @@ export function MobileHorizontalPlayer({
 }: PlayerControlsProps) {
   return (
     <div className="w-sm rounded-2xl overflow-hidden bg-prompt-input-background backdrop-blur-lg shadow-2xl">
-      {/* Main Content Container */}
       <div className="flex items-center gap-3 p-3 pb-2">
-        {/* Album Art */}
         <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-purple-900/50 shrink-0 shadow-lg">
           {currentGeneration.thumbnailUrl ? (
             <Image
@@ -30,7 +28,7 @@ export function MobileHorizontalPlayer({
               className="object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-600 to-purple-800">
+            <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-purple-600 to-purple-800">
               <div className="text-white text-xs font-bold">
                 {currentGeneration.prompt.charAt(0).toUpperCase()}
               </div>
@@ -38,7 +36,6 @@ export function MobileHorizontalPlayer({
           )}
         </div>
 
-        {/* Title and Artist */}
         <div className="min-w-0 flex-1">
           <div className="text-white text-base font-bold truncate">
             {currentGeneration.prompt}
@@ -46,9 +43,7 @@ export function MobileHorizontalPlayer({
           <div className="text-purple-200 text-sm truncate">@jhonny</div>
         </div>
 
-        {/* Right Controls */}
         <div className="flex items-center gap-2 shrink-0">
-          {/* Volume Control */}
           <div className="flex items-center gap-1.5">
             <input
               type="range"
@@ -72,7 +67,6 @@ export function MobileHorizontalPlayer({
             </button>
           </div>
 
-          {/* Heart Icon */}
           <button
             onClick={() => setIsLiked(!isLiked)}
             className={`p-2 hover:bg-white/10 rounded-lg transition-all cursor-pointer`}
@@ -86,7 +80,6 @@ export function MobileHorizontalPlayer({
             />
           </button>
 
-          {/* Play/Pause Button */}
           <button
             onClick={() => setIsPlaying(!isPlaying)}
             className="p-2 hover:bg-white/10 rounded-lg transition-all cursor-pointer"
@@ -104,7 +97,6 @@ export function MobileHorizontalPlayer({
         </div>
       </div>
 
-      {/* Progress Bar at Bottom */}
       <div
         className="progress-bar h-1 cursor-pointer group relative"
         onClick={handleProgressClick}

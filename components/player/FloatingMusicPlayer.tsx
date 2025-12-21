@@ -139,8 +139,8 @@ export function FloatingMusicPlayer() {
             : "bg-prompt-input-background backdrop-blur-lg border border-border"
         } shadow-2xl rounded-2xl overflow-visible transition-all duration-300 ${
           layout === "horizontal"
-            ? "bottom-4 left-4 right-4 md:left-1/2 md:right-auto md:-translate-x-1/2  md:ml-30  w-4xl"
-            : "bottom-4 right-4 w-[280px]"
+            ? "bottom-4 left-4 right-4 md:left-1/2 md:right-auto md:-translate-x-1/2  md:ml-25 w-4xl"
+            : "bottom-4 right-4 w-70"
         }`}
       >
         {!isMobile && (

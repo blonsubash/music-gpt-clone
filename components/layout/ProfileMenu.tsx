@@ -2,14 +2,20 @@
 
 import { Info, ChevronRight, Settings, X } from "lucide-react";
 import { useGenerationStore } from "@/lib/store";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
-import { GenerationItem } from "@/components/generation";
+import {
+  GenerationItem,
+  GenerationItemSkeleton,
+} from "@/components/generation";
 
 interface ProfileMenuProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const ITEMS_PER_PAGE = 6;
+const LOADING_DELAY = 3000;
 
 export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const generations = useGenerationStore((state) => state.generations);
@@ -34,6 +40,19 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   );
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [displayedCount, setDisplayedCount] = useState(ITEMS_PER_PAGE);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const loaderRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const actualDisplayedCount = useMemo(() => {
+    if (generations.length <= ITEMS_PER_PAGE) {
+      return ITEMS_PER_PAGE;
+    }
+    return displayedCount;
+  }, [generations.length, displayedCount]);
+
+  const hasMoreItems = actualDisplayedCount < generations.length;
 
   if (isOpen && !shouldRender) {
     setShouldRender(true);
@@ -41,7 +60,11 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
 
   useEffect(() => {
     if (isOpen) {
-      const timer = setTimeout(() => setIsAnimating(true), 10);
+      const timer = setTimeout(() => {
+        setIsAnimating(true);
+        setDisplayedCount(ITEMS_PER_PAGE);
+        setIsLoadingMore(false);
+      }, 10);
       return () => clearTimeout(timer);
     } else {
       const animationTimer = setTimeout(() => setIsAnimating(false), 0);
@@ -51,7 +74,45 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
         clearTimeout(renderTimer);
       };
     }
-  }, [isOpen, shouldRender]);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!hasMoreItems || isLoadingMore || !isOpen) return;
+
+    const currentLoaderRef = loaderRef.current;
+    const currentScrollContainer = scrollContainerRef.current;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const target = entries[0];
+        if (target.isIntersecting && hasMoreItems && !isLoadingMore) {
+          setIsLoadingMore(true);
+
+          setTimeout(() => {
+            setDisplayedCount((prev) =>
+              Math.min(prev + ITEMS_PER_PAGE, generations.length)
+            );
+            setIsLoadingMore(false);
+          }, LOADING_DELAY);
+        }
+      },
+      {
+        root: currentScrollContainer,
+        rootMargin: "100px",
+        threshold: 0.1,
+      }
+    );
+
+    if (currentLoaderRef) {
+      observer.observe(currentLoaderRef);
+    }
+
+    return () => {
+      if (currentLoaderRef) {
+        observer.unobserve(currentLoaderRef);
+      }
+    };
+  }, [hasMoreItems, isLoadingMore, generations.length, isOpen]);
 
   if (!shouldRender) return null;
 
@@ -77,7 +138,10 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
           boxShadow: "0px 0px 24px 0px rgba(0, 0, 0, 0.478)",
         }}
       >
-        <div className="p-6 space-y-4 max-h-150 w-100 max-w-100 overflow-y-auto custom-scrollbar">
+        <div
+          ref={scrollContainerRef}
+          className="p-6 space-y-4 max-h-150 w-100 max-w-100 overflow-y-auto custom-scrollbar"
+        >
           <div className="pb-4 border-b border-border space-y-4">
             <div className="flex gap-4 items-center">
               <div
@@ -263,17 +327,40 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
                 No generations yet
               </div>
             ) : (
-              <AnimatePresence mode="popLayout">
-                {generations.map((generation, index) => (
-                  <GenerationItem
-                    key={generation.id}
-                    generation={generation}
-                    index={index}
-                    variant="compact"
-                    onClose={onClose}
-                  />
-                ))}
-              </AnimatePresence>
+              <>
+                <AnimatePresence mode="popLayout">
+                  {generations
+                    .slice(0, actualDisplayedCount)
+                    .map((generation, index) => (
+                      <GenerationItem
+                        key={generation.id}
+                        generation={generation}
+                        index={index}
+                        variant="compact"
+                        onClose={onClose}
+                      />
+                    ))}
+                </AnimatePresence>
+
+                {isLoadingMore && (
+                  <div className="space-y-3">
+                    {Array.from({
+                      length: Math.min(
+                        ITEMS_PER_PAGE,
+                        generations.length - actualDisplayedCount
+                      ),
+                    }).map((_, index) => (
+                      <GenerationItemSkeleton
+                        key={`skeleton-${index}`}
+                        index={index}
+                        variant="compact"
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {hasMoreItems && <div ref={loaderRef} className="h-4" />}
+              </>
             )}
           </div>
         </div>
